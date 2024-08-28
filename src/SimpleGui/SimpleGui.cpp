@@ -1,5 +1,9 @@
-//
-// Created by david on 8/24/2024.
-//
-
+#include <utility>
 #include "SimpleGui.h"
+
+
+namespace SGui {
+
+    // nothing here
+
+}

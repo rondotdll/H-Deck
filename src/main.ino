@@ -4,7 +4,7 @@
 #include "main.h"
 #include "SimpleGui/SimpleGui.h"
 
-static TFT_eSPI* tft;
+// static TFT_eSPI* tft;
 static SGui::UIButton* button;
 
 void powerTFT() {
@@ -18,23 +18,23 @@ void powerTFT() {
 void setup() {
     Serial.begin(115200);
 
-    tft = SGui::Init();
+    SGui::Init();
     powerTFT();
 
     // Create and draw a window
-    SGui::UIWindow window(10, 10, 220, 150, "Main Window");
+    SGui::UIWindow window(0, 0, "Main Window", 0, 0, TFT_RED);
     window.draw();
 
     // Create and draw a label
-    SGui::UILabel label(20, 40, "Hello, World!");
+    SGui::UILabel label(5, 25, "Hello, World!");
     label.draw();
 
-    // Create and draw a button with an action
-    button = new SGui::UIButton(20, 80, "Click Me", []() {
-        Serial.println("Button clicked!");
-    });
+    // // Create and draw a button with an action
+    // button = new SGui::UIButton(20, 80, "Click Me", []() {
+    //     Serial.println("Button clicked!");
+    // });
 
-    button->draw();
+    // button->draw();
 }
 
 void loop() {

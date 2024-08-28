@@ -3,8 +3,8 @@
 
 #define ST7789_DRIVER     // Configure all registers
 
-#define TFT_WIDTH  240
-#define TFT_HEIGHT 320
+#define TFT_WIDTH  320
+#define TFT_HEIGHT 240
 
 // #define CGRAM_OFFSET      // Library will add offsets required
 

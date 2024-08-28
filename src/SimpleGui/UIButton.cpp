@@ -5,10 +5,10 @@
 #include "UIButton.h"
 
 namespace SGui {
-    void UIButton::press(bool p) {
-        isPressed = p;
+    void UIButton::press(bool state) {
+        isPressed = state;
         draw();
-        if (p && onClick) onClick();
+        if (state && onClick) onClick();
     }
 
     void UIButton::draw() {
