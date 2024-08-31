@@ -28,17 +28,17 @@ namespace SGui {
   // Draw the label
   void UILabel::Draw() {
     if (this->parent_ != nullptr) {
-      x_ =  this->parent_->x_
-          + static_cast<UIContainer*>(this->parent_)->px_
-          + this->x_;
+      this->pos_.x =  this->parent_->pos_.x
+          + static_cast<UIContainer*>(this->parent_)->padding_.x
+          + this->pos_.x;
 
-      y_ =  this->parent_->y_
-          + static_cast<UIContainer*>(this->parent_)->py_
-          + this->y_;
+      this->pos_.y =  this->parent_->pos_.y
+          + static_cast<UIContainer*>(this->parent_)->padding_.y
+          + this->pos_.y;
     }
 
     tft.setTextColor(this->color_);
     tft.setTextSize(this->text_size_);
-    tft.drawString(this->text_, this->x_, this->y_);
+    tft.drawString(this->text_, this->pos_.x, this->pos_.y);
   }
 }  // namespace SGui

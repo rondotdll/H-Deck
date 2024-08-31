@@ -10,18 +10,13 @@ namespace SGui {
 // Stores horizontal padding, vertical padding, and child components
 // (All NESTING components should inherit from this class)
 class UIContainer : public UIComponent {
- private:
-  std::vector<UIComponent*> children_;
-  int px_ = 0; // horizontal padding
-  int py_ = 0; // vertical padding
-
  public:
-  explicit UIContainer() : UIComponent() {
-    this->children_ = {};
+  std::vector<UIComponent*> children_;
+  SGRect padding_{0, 0};
 
-    this->px_ = 0;
-    this->py_ = 0;
-  };
+  UIContainer() = default; // default constructor
+  explicit UIContainer(SGRect padding, std::vector<UIComponent*> children)
+      : UIComponent(), padding_(padding), children_(std::move(children)) {}
 
   // Draw just the children of the component (not the component itself)
   void DrawChildren();

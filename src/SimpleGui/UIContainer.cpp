@@ -26,8 +26,8 @@ namespace SGui {
   }
 
   UIContainer* UIContainer::SetPadding(int padding_x, int padding_y) {
-    this->px_ = padding_x;
-    this->py_ = padding_y;
+    this->padding_.x = padding_x;
+    this->padding_.y = padding_y;
     return this;
   }
 }  // namespace SGui

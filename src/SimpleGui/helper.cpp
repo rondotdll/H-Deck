@@ -1,8 +1,9 @@
 #include <utility>
 #include <TFT_eSPI.h>
 
-#include "helper.h"
 #include "types.h"
+#include "helper.h"
+#include "init.h"
 
 namespace SGui {
 // Find the true edges of the screen (useful for drawing around a screen border)

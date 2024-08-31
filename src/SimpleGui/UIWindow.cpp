@@ -7,37 +7,37 @@
 namespace SGui {
 // Set the title of the window
 UIWindow* UIWindow::SetTitle(String title) {
-  this->title = title;
+  this->title_ = title;
   return this;
 }
 
 // Set the color of the window
 UIWindow* UIWindow::SetColor(color_t color) {
-  this->color = color;
+  this->color_ = color;
   return this;
 }
 
 // Set the padding of the container (accounts for window border and title bar)
 UIContainer* UIWindow::SetPadding(int padding_x, int padding_y) {
-  this->px_ = padding_x + border_thickness;
-  this->py_ = padding_y + border_thickness + (2*title_py);
+  this->padding_.x = padding_x + border_thickness;
+  this->padding_.y = padding_y + border_thickness + (2*title_padding.y);
   return this;
 }
 
 // Draw the window and its children
 void UIWindow::Draw() {
   clearScreen();
-  tft.drawRect(0, 0, w_, h_, color);
-  tft.setTextColor(getContrast(color));
+  tft.drawRect(0, 0, this->dim_.x, this->dim_.y, color_);
+  tft.setTextColor(getContrast(color_));
 
-  if (title != nullptr && title != "") {
+  if (title_ != nullptr && title_ != "") {
 
-    tft.fillRect(this->x_,
-                 this->y_,
-                 this->x_ + this->w_,
-                 this->y_ + tft.fontHeight() + 2 * this->title_py,
-                 color);  // Title bar separator
-    tft.drawString(title, x_ + this->title_px, y_ + this->title_py);
+    tft.fillRect(this->pos_.x,
+                 this->pos_.y,
+                 this->pos_.x + this->dim_.x,
+                 this->pos_.y + tft.fontHeight() + 2 * this->title_padding.y,
+                 color_);  // Title bar separator
+    tft.drawString(title_, this->pos_.x + this->title_padding.x, this->pos_.y + this->title_padding.y);
   }
 
   DrawChildren();

@@ -14,8 +14,8 @@ class UIComponent {
   // int w_ = 0;  // width
   // int h_ = 0;  // height
 
-  SGPoint pos_{0, 0};
-  SGRect dim_{0, 0};
+  SGPoint pos_{0, 0}; // 2D point representing position
+  SGRect dim_{0, 0}; // 2D point representing size
 
   bool focused_ = false; // focused state (unused)
   UIComponent* parent_ = nullptr;

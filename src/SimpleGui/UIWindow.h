@@ -10,33 +10,22 @@ namespace SGui {
 // Window Component
 class UIWindow : public UIContainer {
  public:
-  int title_px = 4; // Title horizontal padding
-  int title_py = 4; // Title vertical padding
+  const SGRect title_padding{4, 4};
   int border_thickness = 1;
-  String title; // Window title
-  color_t color; // Window color
+  String title_ = ""; // Window title
+  color_t color_ = TFT_WHITE; // Window color
 
-  explicit UIWindow(String title = "", int x = 0, int y = 0, int w = 0,
-                    int h = 0, color_t color = TFT_WHITE) {
-    this->x_ = x;
-    this->y_ = y;
+  explicit UIWindow() : UIContainer() {
+    if (this->dim_.x == 0)
+      this->dim_.x = GetScreenEdges().first;
+    if (this->dim_.y == 0)
+      this->dim_.y = GetScreenEdges().second;
 
-    this->w_ = w;
-    this->h_ = h;
+    this->padding_.x = border_thickness;
+    this->padding_.y = border_thickness + (2*title_padding.y);
 
-    this->px_ = px_ + border_thickness;
-    this->py_ = py_ + border_thickness + (2*title_py);
-
-    if (this->w_ == 0)
-      this->w_ = GetScreenEdges().first;
-    if (this->h_ == 0)
-      this->h_ = GetScreenEdges().second;
-
-    this->color = color;
-    this->title = title;
-
-    if (title != "") {
-      this->py_ = tft.fontHeight() + y + 1;
+    if (title_ != "") {
+      this->pos_.y = tft.fontHeight() + this->pos_.y + 1;
     }
   };
 

@@ -17,21 +17,9 @@ class UILabel : public UIComponent {
   int text_size_ = 1;
   color_t color_ = TFT_WHITE;
 
-  explicit UILabel(String text, int text_size = 1, color_t text_color = TFT_WHITE, int x, int y, int w, int h) : UIComponent(x, y, w, h) {
-    // this->x_ = x;
-    // this->y_ = y;
-
-    if (this->w_ == 0)
-      this->w_ = tft.textWidth(text);
-    if (this->h_ == 0)
-      this->h_ = tft.fontHeight();
-
-    this->w_ = w;
-    this->h_ = h;
-
-    this->text_ = text;
-    this->text_size_ = text_size;
-    this->color_ = text_color;
+  explicit UILabel(String text) : UIComponent() {
+      this->dim_.x = tft.textWidth(text);
+      this->dim_.y = tft.fontHeight();
   };
 
   // Set the text of the label
@@ -44,13 +32,13 @@ class UILabel : public UIComponent {
   UILabel* SetColor(color_t color);
 
   // Get the label text
-  String GetText() { return this->text_; }
+  String GetText() const { return this->text_; }
 
   // Get the text size of the label
-  int GetTextSize() { return this->text_size_; }
+  int GetTextSize() const { return this->text_size_; }
 
   // Get the text color of the label
-  color_t GetTextColor() { return this->color_; }
+  color_t GetTextColor() const { return this->color_; }
 
   // Draw the label
   void Draw() override;
