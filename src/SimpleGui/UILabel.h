@@ -18,6 +18,7 @@ class UILabel : public UIComponent {
   color_t color_ = TFT_WHITE;
 
   explicit UILabel(String text) : UIComponent() {
+      this->text_ = text;
       this->dim_.x = tft.textWidth(text);
       this->dim_.y = tft.fontHeight();
   };

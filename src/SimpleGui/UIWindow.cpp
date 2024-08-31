@@ -26,16 +26,25 @@ UIContainer* UIWindow::SetPadding(int padding_x, int padding_y) {
 
 // Draw the window and its children
 void UIWindow::Draw() {
-  clearScreen();
-  tft.drawRect(0, 0, this->dim_.x, this->dim_.y, color_);
+  if (this->parent_ != nullptr) {
+    this->pos_.x = this->parent_->pos_.x
+        + static_cast<UIContainer*>(this->parent_)->padding_.x
+        + this->pos_.x;
+
+    this->pos_.y = this->parent_->pos_.y
+        + static_cast<UIContainer*>(this->parent_)->padding_.y
+        + this->pos_.y;
+  }
+
+  tft.drawRect(this->pos_.x, this->pos_.y, this->dim_.x, this->dim_.y, color_);
   tft.setTextColor(getContrast(color_));
 
+  // If title isn't null, draw the title bar
   if (title_ != nullptr && title_ != "") {
-
     tft.fillRect(this->pos_.x,
                  this->pos_.y,
-                 this->pos_.x + this->dim_.x,
-                 this->pos_.y + tft.fontHeight() + 2 * this->title_padding.y,
+                 this->dim_.x,
+                 tft.fontHeight() + (2 * this->title_padding.y),
                  color_);  // Title bar separator
     tft.drawString(title_, this->pos_.x + this->title_padding.x, this->pos_.y + this->title_padding.y);
   }

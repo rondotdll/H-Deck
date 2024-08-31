@@ -6,13 +6,13 @@
 
 namespace SGui {
   void UIContainer::DrawChildren() {
-    for (UIComponent* child : children_) {
+    for (UIComponent* child : this->children_) {
       child->Draw();
     }
   }
 
   UIContainer* UIContainer::AddChild(UIComponent* child) {
-    children_.push_back(child);
+    this->children_.push_back(child);
     child->SetParent(this);
     return this;
   }

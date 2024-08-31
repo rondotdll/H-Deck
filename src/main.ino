@@ -19,13 +19,15 @@ void setup() {
   powerTFT();
 
   // Create and draw a window
-  SGui::UIWindow window = SGui::UIWindow();
-  window.SetTitle("H-DECK PROTOTYPE");
+  SGui::UIWindow mainWindow = SGui::UIWindow();
+  mainWindow.SetTitle("H-DECK PROTOTYPE");
+  mainWindow.SetColor(TFT_RED);
 
   SGui::UILabel title_label = SGui::UILabel("Hello, World!");
+  title_label.SetPos(5, 2);
 
-  window.AddChild(&title_label);
-  window.Draw();
+  mainWindow.AddChild(&title_label);
+  mainWindow.Draw();
 }
 
 void loop() {}
