@@ -3,6 +3,7 @@
 # Author: Kehan Xue, kehan.xue (at) gmail.com
 # More information: https://sun.iwu.edu/~mliffito/cs_codex/posts/google-c++-style-guide/
 
+
 Language: Cpp
 BasedOnStyle: Google
 AccessModifierOffset: -1
@@ -15,7 +16,7 @@ AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Never  # To avoid conflict, set this "Never" and each "if statement" should include brace when coding
+AllowShortIfStatementsOnASingleLine: Never  # To avoid conflict, set this to "Never" and each "if statement" should include brace when coding
 AllowShortLambdasOnASingleLine: Inline
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
