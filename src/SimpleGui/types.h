@@ -4,10 +4,17 @@
 
 namespace SGui {
 
-typedef struct _Vector2D {
+typedef struct _Point2D {
   uint16_t x;
   uint16_t y;
 } SGRect, SGPoint;
+
+typedef struct _BoxSpacing {
+  uint16_t top;
+  uint16_t right;
+  uint16_t bottom;
+  uint16_t left;
+} SGBoxSpacing, SGBorderSize;
 
 typedef std::function<void()> e_handler_t;  // Event handler type
 typedef int color_t;                        // Color type

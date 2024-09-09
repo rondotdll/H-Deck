@@ -19,8 +19,8 @@ class UILabel : public UIComponent {
 
   explicit UILabel(String text) : UIComponent() {
       this->text_ = text;
-      this->dim_.x = tft.textWidth(text);
-      this->dim_.y = tft.fontHeight();
+      this->size_.x = tft.textWidth(text);
+      this->size_.y = tft.fontHeight();
   };
 
   // Set the text of the label

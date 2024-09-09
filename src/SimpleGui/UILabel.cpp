@@ -10,8 +10,8 @@ namespace SGui {
   // Set the text of the label
   UILabel* UILabel::SetText(String text) {
     this->text_ = text;
-    this->dim_.x = tft.textWidth(text);
-    this->dim_.y = tft.fontHeight();
+    this->size_.x = tft.textWidth(text);
+    this->size_.y = tft.fontHeight();
     return this;
   }
 
@@ -30,13 +30,7 @@ namespace SGui {
   // Draw the label
   void UILabel::Draw() {
     if (this->parent_ != nullptr) {
-      this->pos_.x = this->parent_->pos_.x
-          + static_cast<UIContainer*>(this->parent_)->padding_.x
-          + this->pos_.x;
-
-      this->pos_.y = this->parent_->pos_.y
-          + static_cast<UIContainer*>(this->parent_)->padding_.y
-          + this->pos_.y;
+      this->MoveIntoParentBounds();
     }
 
     tft.setTextColor(this->color_);
