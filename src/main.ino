@@ -56,5 +56,6 @@ void loop() {
 
 
 
+
   delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
 }

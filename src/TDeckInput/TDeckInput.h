@@ -1,6 +1,6 @@
 #pragma once
 
-#include "handler.h"
+#include "../SimpleGui/handler.h"
 
 namespace Trackball {
   // Nothing yet.

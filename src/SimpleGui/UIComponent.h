@@ -8,6 +8,8 @@ namespace SGui {
 // Stores position, size, and parent component
 // (All components should inherit from this class)
 class UIComponent {
+private:
+  bool isInput_
  public:
 
   SGPoint pos_{0, 0}; // 2D point representing position
@@ -23,6 +25,8 @@ class UIComponent {
 
   // Draw the component
   virtual void Draw() = 0;
+
+  bool isInput() const {return isInput_;}
 
   // Modify position to move the component into the bounds of its parent
   void MoveIntoParentBounds();
