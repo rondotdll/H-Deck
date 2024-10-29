@@ -18,7 +18,7 @@ namespace SGui {
   };
 
   // Input types for input events
-  enum input_variety_t {
+  enum input_type_t {
     BASIC = 1,
     TRACKBALL = 1,
     KEYBOARD = 1,
@@ -41,6 +41,9 @@ namespace SGui {
   typedef int color_t;                        // Color type
 
   // Stores specific input events (type & ID)
-  typedef std::unordered_map<int, input_variety_t> input_event_t;
+  typedef struct input_event_t {
+    input_type_t type;
+    int id;
+  } input_event_t;
 
 }  // namespace SGui

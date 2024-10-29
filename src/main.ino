@@ -1,9 +1,9 @@
 #include <SPI.h>
 #include <TFT_eSPI.h>
 
+#include "main.h"
 #include "SimpleGui/SimpleGui.h"
 #include "TDeckInput/TDeckInput.h"
-#include "main.h"
 
 #define MAX_FRAMERATE 15
 
@@ -17,12 +17,7 @@ void powerTFT() {
   digitalWrite(POWER_ON_P, HIGH);
 }
 
-TDeckInput::handler_t InputHandler;
-
-
 void setup() {
-  InputHandler = TDeckInput::handler_t();
-
   Serial.begin(115200);
 
   pinMode(POWER_ON_P, OUTPUT);
@@ -41,6 +36,8 @@ void setup() {
   attachInterrupt(TRACKBALL_PRESS_P, doSomething, RISING);
 
   Serial.println("Trackball Test Started");
+
+  xTaskCreate();
 }
 
 void loop() {

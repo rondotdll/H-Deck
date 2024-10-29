@@ -1,69 +1,74 @@
 #include "SimpleGui.h"
 
 namespace SGui {
-  // Handle a single input event
+  // Handles a single input_event_t from the input_queue
   void Gui::handle(input_event_t input) {
       if (input_handlers_.find(input) != input_handlers_.end()) {
-        input_handlers_[input]();
+        input_handlers_[input](this);
       }
   }
 
-  // Handle all inputs in the input stack
+  // Handles ALL inputs currently queued in the input_queue
   void Gui::handle_inputs() {
-    for (auto i = input_stack_.begin(); i != input_stack_.end();) {
+    for (auto i = input_queue_.begin(); i != input_queue_.end();) {
       handle(*i);
-      input_stack_.erase(i);
-      i++;
+      input_queue_.erase(i);
+      ++i;
     }
   }
 
-    // Add a window to the viewport
-    void Gui::addWindow(UIWindow* window) {
-      this->viewport_.push_back(window);
-      if (this->active_window_ == nullptr) {
-        this->active_window_ = window;
-      }
-    }
-
-    // Remove a window from the viewport
-    void Gui::removeWindow(UIWindow* window) {
-      if (this->active_window_ == window) {
-        this->active_window_ = nullptr;
-      }
-      this->viewport_.erase(std::remove(this->viewport_.begin(), this->viewport_.end(), window), this->viewport_.end());
-    }
-
-    // Set the active window
-    void Gui::setActiveWindow(UIWindow* window) {
+  // Adds a window to the viewport
+  void Gui::add_window(UIWindow* window) {
+    this->viewport_.push_back(window);
+    if (this->active_window_ == nullptr) {
       this->active_window_ = window;
     }
+  }
 
-    // Bind an input event to a handler
-    // input: The input event to bind
-    // handle_func: The handler function to bind to the input event
-    void Gui::bindInput(input_event_t input, void* handle_func) {
-      this->input_handlers_[input] = handle_func;
+  // Removes a window from the viewport
+  void Gui::remove_window(UIWindow* window) {
+    if (this->active_window_ == window) {
+      this->active_window_ = nullptr;
     }
+    this->viewport_.erase(std::remove(this->viewport_.begin(), this->viewport_.end(), window), this->viewport_.end());
+  }
 
-    // Remove an input event from the input handlers
-    // input: The input event to remove
-    void Gui::removeInput(input_event_t input) {
-      this->input_handlers_.erase(input);
-    }
+  // Sets the active window (window to be drawn
+  void Gui::set_active_window(UIWindow* window) {
+    this->active_window_ = window;
+  }
 
-    // Add an input event to the input stack
-    // input: The input event to add
-    void Gui::addInputToStack(input_event_t input) {
-      this->input_stack_.push_back(input);
-    }
+  // Binds an in put event to a handler (void function pointer)
+  // input: The input event to bind
+  // handle_func: The handler function to bind to the input event
+  void Gui::bind_input_event(input_event_t input, void* handle_func) {
+    this->input_handlers_[input] = handle_func;
 
-    // Clear the input stack
-    void Gui::clearInputStack() {
-      this->input_stack_.clear();
+    // if the input type is basic, we need to attachInterupt it's ID (pin) to the handle_func
+    if (input.type == BASIC) {
+      attachInterrupt(input.id, isr_wrapper_function, RISING);
     }
+  }
 
-    // Draw the GUI
-    void Gui::draw() {
-      active_window_->Draw();
-    }
+  // Unbinds an input event from its respective handler
+  // input: The input event to remove
+  void Gui::unbind_input_event(input_event_t input) {
+    this->input_handlers_.erase(input);
+  }
+
+  // Adds an input event to the input queue
+  // input: The input event to add
+  void Gui::create_input_event(input_event_t input) {
+    this->input_queue_.push_back(input);
+  }
+
+  // Clears the input queue
+  void Gui::clear_input_queue() {
+    this->input_queue_.clear();
+  }
+
+  // Draws the Gui (active window)
+  void Gui::draw() {
+    active_window_->Draw();
+  }
 }
