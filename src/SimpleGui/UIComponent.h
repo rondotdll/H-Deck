@@ -9,7 +9,7 @@ namespace SGui {
 // (All components should inherit from this class)
 class UIComponent {
 private:
-  bool isInput_
+  bool isInput_ = false;
  public:
 
   SGPoint pos_{0, 0}; // 2D point representing position

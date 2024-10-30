@@ -25,6 +25,21 @@ namespace SGui {
     TOUCH = 2,
   };
 
+  // Trackball single input IDs
+  enum trackball_input_id_t: uint8_t {
+    TRACKBALL_PRESS = 16,   // 00010000
+    TRACKBALL_UP =    1,    // 00000001
+    TRACKBALL_DOWN =  2,    // 00000010
+    TRACKBALL_LEFT =  4,    // 00000100
+    TRACKBALL_RIGHT = 8,    // 00001000
+  };
+
+  enum handler_exception_t {
+    OK,
+    NO_HANDLER,
+    BAD_HANDLER,
+  };
+
   typedef struct _Point2D {
     uint16_t x;
     uint16_t y;
