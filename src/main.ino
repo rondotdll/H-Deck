@@ -39,6 +39,8 @@ void setup() {
   gui.add_window(&window);
   gui.set_active_window(&window);
 
+  Serial.println("Setup Finished.");
+
 }
 
 void loop() {
@@ -48,8 +50,8 @@ void loop() {
    * 3.) Update UI
    * 4.) Render
    */
-
-  // Serial.println(gui.get_active_window()->title_);
+    Serial.println("Looped.");
+  Serial.println(gui.get_active_window()->title_);
   // gui.draw();
   // delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
 }
