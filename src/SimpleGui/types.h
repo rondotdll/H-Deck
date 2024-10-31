@@ -59,6 +59,11 @@ namespace SGui {
   typedef struct input_event_t {
     input_type_t type;
     int id;
+
+    uint16_t flatten() const {
+      return (static_cast<uint16_t>(this->type) << 8) | this->id;
+    };
+
   } input_event_t;
 
 }  // namespace SGui

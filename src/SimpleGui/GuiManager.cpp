@@ -9,46 +9,29 @@
 
 namespace SGui {
 
-  constexpr uint8_t DUAL_INPUT_FLAG = 0xC0; // 11000000
-
   // Poll the trackball for input
-  void pollTrackballTask(GUIManager* instance) {
-
+  [[noreturn]] void pollTrackballTask(GUIManager* instance) {
     while (true) {
       uint8_t tb_state = 0;
 
       // read up to 2 trackball inputs
       // First check the PRESS pin
-      if (digitalRead(TRACKBALL_PRESS_P) == LOW) {
-        // set the press bit to ON
-        tb_state |= TRACKBALL_PRESS;
-        // no directional inputs should take place if the trackball is pressed in.
-        tb_state = DUAL_INPUT_FLAG;
-      }
+      tb_state |= digitalRead(TRACKBALL_PRESS_P) * TRACKBALL_PRESS;
+      if (tb_state) goto end; // no dual inputs
 
       // Then check the UP & DOWN pins
-      if ((tb_state & DUAL_INPUT_FLAG) < DUAL_INPUT_FLAG && digitalRead(TRACKBALL_UP_P) == LOW) {
-        // set the up bit to ON
-        tb_state |= TRACKBALL_UP;
-        // add 1 input to our DUAL_INPUT tracker portion
-        tb_state += 0x40; // 01000000
-      } else if ((tb_state & DUAL_INPUT_FLAG) < DUAL_INPUT_FLAG && digitalRead(TRACKBALL_DOWN_P) == LOW) {
-        // set the down bit to ON
-        tb_state |= TRACKBALL_DOWN;
-        tb_state += 0x40;
-      }
+      tb_state |= digitalRead(TRACKBALL_UP_P) * TRACKBALL_UP;
+      tb_state |= digitalRead(TRACKBALL_DOWN_P) * TRACKBALL_DOWN;
+      if (tb_state) goto end;
 
-      // Finally check the LEFT & RIGHT pins
-      if ((tb_state & DUAL_INPUT_FLAG) < DUAL_INPUT_FLAG && digitalRead(TRACKBALL_LEFT_P) == LOW) {
-        tb_state |= TRACKBALL_LEFT;
-        tb_state += 0x40;
-      } else if ((tb_state & DUAL_INPUT_FLAG) < DUAL_INPUT_FLAG && digitalRead(TRACKBALL_RIGHT_P) == LOW) {
-        tb_state |= TRACKBALL_RIGHT;
-        tb_state += 0x40;
-      }
+      // Then check the LEFT & RIGHT pins
+      tb_state |= digitalRead(TRACKBALL_LEFT_P) * TRACKBALL_LEFT;
+      tb_state |= digitalRead(TRACKBALL_RIGHT_P) * TRACKBALL_RIGHT;
 
-      if (tb_state != 0) {
-        instance->create_input_event({TRACKBALL, tb_state & ~DUAL_INPUT_FLAG});
+      end:
+      // verify no dual inputs
+      if (tb_state && (tb_state & (tb_state - 1)) == 0) {
+        instance->create_input_event({TRACKBALL, tb_state});
       }
 
     }
@@ -66,9 +49,11 @@ namespace SGui {
 
   // Handles a single input_event_t from the input_queue
   handler_exception_t GUIManager::handle(input_event_t input) {
-      if (input_handlers_.find(input) != input_handlers_.end()) {
+      uint16_t id = input.flatten();
+
+      if (input_handlers_.find(id) != input_handlers_.end()) {
         try {
-          input_handlers_[input](this);
+          input_handlers_[id](self_); // <- this is so fucking cursed lmfao
           return OK;
         } catch (...) {
           return BAD_HANDLER;
@@ -114,16 +99,14 @@ namespace SGui {
   // Binds an in put event to a handler (void function pointer)
   // input: The input event to bind
   // handle_func: The handler function to bind to the input event
-  void GUIManager::bind_input_event(input_event_t input, void* handle_func) {
-    this->input_handlers_[input] = handle_func;
-
-
+  void GUIManager::bind_input_event(input_event_t input, void (*handle_func)(GUIManager*)) {
+    this->input_handlers_[input.flatten()] = handle_func;
   }
 
   // Unbinds an input event from its respective handler
   // input: The input event to remove
   void GUIManager::unbind_input_event(input_event_t input) {
-    this->input_handlers_.erase(input);
+    this->input_handlers_.erase(input.flatten());
   }
 
   // Adds an input event to the input queue

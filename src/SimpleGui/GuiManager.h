@@ -1,7 +1,7 @@
 #pragma once
 
+#include <map>
 #include <vector>
-#include <unordered_map>
 
 #include "types.h"
 #include "pins.h"
@@ -20,7 +20,7 @@ namespace SGui {
     UIWindow* active_window_ = nullptr;
     viewport_t viewport_ = {};
     std::vector<input_event_t> input_queue_ = {};
-    std::unordered_map<input_event_t, void*> input_handlers_;
+    std::map<uint16_t, void(*)(GUIManager*)> input_handlers_;
 
     static GUIManager* self_;
   public:
@@ -54,7 +54,7 @@ namespace SGui {
     // Binds an input event to a handler (void function pointer)
     // input: The input event to bind
     // handler: The handler function to bind to the input event
-    void bind_input_event(input_event_t input, void* handler);
+    void bind_input_event(input_event_t input, void (*handle_func)(GUIManager*));
     // Unbinds an input event from its respective handler
     // input: The input event to remove
     void unbind_input_event(input_event_t input);
