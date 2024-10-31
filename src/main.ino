@@ -2,27 +2,43 @@
 #include <TFT_eSPI.h>
 
 #include "main.h"
+
 #include "SimpleGui/SimpleGui.h"
 
 #define MAX_FRAMERATE 15
 
 constexpr double frame_sleep = 1000 / MAX_FRAMERATE;
 
-void powerTFT() {
-  pinMode(TFT_BACKLIGHT_P, OUTPUT);
-  digitalWrite(TFT_BACKLIGHT_P, HIGH);
-
+void powerBoard() {
   pinMode(POWER_ON_P, OUTPUT);
   digitalWrite(POWER_ON_P, HIGH);
 }
 
+void powerTFT() {
+  pinMode(TFT_BACKLIGHT_P, OUTPUT);
+  digitalWrite(TFT_BACKLIGHT_P, HIGH);
+}
+
+static SGui::GUIManager gui;
+
 void setup() {
   Serial.begin(115200);
 
-  pinMode(POWER_ON_P, OUTPUT);
-  digitalWrite(POWER_ON_P, HIGH);
+  powerTFT();
+  powerBoard();
 
-  Serial.println("Trackball Test Started");
+  gui = SGui::GUIManager();
+
+  SGui::UIWindow window = SGui::UIWindow();
+  window.SetColor(TFT_RED)
+    ->SetTitle("Example Window")
+    ->AddChild(
+        new SGui::UILabel("Hello, World!\nThis is a basic UI example to verify the code is working properly.")
+    );
+
+  gui.add_window(&window);
+  gui.set_active_window(&window);
+
 }
 
 void loop() {
@@ -33,5 +49,7 @@ void loop() {
    * 4.) Render
    */
 
-  delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
+  // Serial.println(gui.get_active_window()->title_);
+  // gui.draw();
+  // delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
 }

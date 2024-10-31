@@ -37,9 +37,7 @@ namespace SGui {
     }
   }
 
-  void GUIManager::init() {
-    self_ = this;
-
+  void GUIManager::enable_inputs() {
     // Verify pins are set up for input
     pinMode(TRACKBALL_UP_P, INPUT_PULLUP);
     pinMode(TRACKBALL_DOWN_P, INPUT_PULLUP);

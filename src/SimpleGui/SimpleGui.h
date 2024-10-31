@@ -16,6 +16,8 @@
 #include "UILabel.h"
 #include "UIWindow.h"
 
+#include "GuiManager.h"
+
 namespace SGui {
 
 };

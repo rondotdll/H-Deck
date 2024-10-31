@@ -22,13 +22,16 @@ namespace SGui {
     std::vector<input_event_t> input_queue_ = {};
     std::map<uint16_t, void(*)(GUIManager*)> input_handlers_;
 
-    static GUIManager* self_;
+    GUIManager* self_;
   public:
 
-    GUIManager(); // default constructor
+    GUIManager() {
+      // default constructor
+      self_ = this;
+    };
 
     // Initialize the Gui (this MUST be called before use, or inputs will not function)
-    void init();
+    void enable_inputs();
 
     // Handles a single input_event_t from the input_queue
     handler_exception_t handle(input_event_t input);
