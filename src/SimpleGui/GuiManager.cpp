@@ -9,33 +9,7 @@
 
 namespace SGui {
 
-  // Poll the trackball for input
-  [[noreturn]] void pollTrackballTask(GUIManager* instance) {
-    while (true) {
-      uint8_t tb_state = 0;
-
-      // read up to 2 trackball inputs
-      // First check the PRESS pin
-      tb_state |= digitalRead(TRACKBALL_PRESS_P) * TRACKBALL_PRESS;
-      if (tb_state) goto end; // no dual inputs
-
-      // Then check the UP & DOWN pins
-      tb_state |= digitalRead(TRACKBALL_UP_P) * TRACKBALL_UP;
-      tb_state |= digitalRead(TRACKBALL_DOWN_P) * TRACKBALL_DOWN;
-      if (tb_state) goto end;
-
-      // Then check the LEFT & RIGHT pins
-      tb_state |= digitalRead(TRACKBALL_LEFT_P) * TRACKBALL_LEFT;
-      tb_state |= digitalRead(TRACKBALL_RIGHT_P) * TRACKBALL_RIGHT;
-
-      end:
-      // verify no dual inputs
-      if (tb_state && (tb_state & (tb_state - 1)) == 0) {
-        instance->create_input_event({TRACKBALL, tb_state});
-      }
-
-    }
-  }
+  GUIManager* GUIManager::self_ = nullptr; // <- satisfy the linker
 
   void GUIManager::enable_inputs() {
     // Verify pins are set up for input
@@ -43,6 +17,22 @@ namespace SGui {
     pinMode(TRACKBALL_DOWN_P, INPUT_PULLUP);
     pinMode(TRACKBALL_LEFT_P, INPUT_PULLUP);
     pinMode(TRACKBALL_RIGHT_P, INPUT_PULLUP);
+
+    attachInterrupt(TRACKBALL_UP_P, [] {
+        self_->create_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_UP});
+    }, RISING);
+    attachInterrupt(TRACKBALL_DOWN_P, [] {
+        self_->create_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_DOWN});
+    }, RISING);
+    attachInterrupt(TRACKBALL_LEFT_P, [] {
+        self_->create_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_LEFT});
+    }, RISING);
+    attachInterrupt(TRACKBALL_RIGHT_P, [] {
+        self_->create_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_RIGHT});
+    }, RISING);
+    attachInterrupt(TRACKBALL_PRESS_P, [] {
+      self_->create_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_PRESS});
+    }, RISING);
   }
 
   // Handles a single input_event_t from the input_queue
@@ -62,13 +52,15 @@ namespace SGui {
 
   // Handles ALL inputs currently queued in the input_queue
   handler_exception_t GUIManager::handle_inputs() {
-    for (auto i = input_queue_.begin(); i != input_queue_.end();) {
-      handler_exception_t status = handle(*i);
-      if (status) {
+    while (!input_queue_.empty()) {
+      Serial.println(input_queue_.size());
+      handler_exception_t status = handle(input_queue_[0]);
+      if (status == BAD_HANDLER) {
+        Serial.println("ERROR");
         return status;
       }
-      input_queue_.erase(i);
-      ++i;
+
+      input_queue_.erase(input_queue_.begin());
     }
     return OK;
   }
@@ -119,7 +111,7 @@ namespace SGui {
   }
 
   // Draws the Gui (active window)
-  void GUIManager::draw() {
+  void GUIManager::draw() const{
     active_window_->Draw();
   }
 }

@@ -29,10 +29,6 @@ namespace SGui {
 
   // Draw the label
   void UILabel::Draw() {
-    if (this->parent_ != nullptr) {
-      this->MoveIntoParentBounds();
-    }
-
     tft.setTextColor(this->color_);
     tft.setTextSize(this->text_size_);
     tft.drawString(this->text_, this->pos_.x, this->pos_.y);

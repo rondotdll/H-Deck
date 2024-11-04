@@ -28,6 +28,7 @@ UIContainer* UIWindow::SetPadding(int padding_top, int padding_right, int paddin
 
 // Draw the window and its children
 void UIWindow::Draw() {
+  // If the window is inside a container, adjust its position accordingly.
   if (this->parent_ != nullptr) {
     this->MoveIntoParentBounds();
   }

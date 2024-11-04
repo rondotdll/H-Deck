@@ -20,6 +20,7 @@ namespace SGui {
 
     this->children_.push_back(child);
     child->SetParent(this);
+    child->MoveIntoParentBounds();
     return this;
   }
 

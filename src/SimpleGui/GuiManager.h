@@ -21,17 +21,27 @@ namespace SGui {
     viewport_t viewport_ = {};
     std::vector<input_event_t> input_queue_ = {};
     std::map<uint16_t, void(*)(GUIManager*)> input_handlers_;
+    static GUIManager* self_;
 
-    GUIManager* self_;
   public:
+
 
     GUIManager() {
       // default constructor
+      if (self_ != nullptr){
+        Serial.println("ERROR: A GUIManager instance already exists!");
+        return;
+      }
       self_ = this;
     };
 
+    // Destructor to clear the instance on deletion
+    ~GUIManager() {
+      self_ = nullptr;
+    }
+
     // Initialize the Gui (this MUST be called before use, or inputs will not function)
-    void enable_inputs();
+    static void enable_inputs();
 
     // Handles a single input_event_t from the input_queue
     handler_exception_t handle(input_event_t input);
@@ -70,11 +80,8 @@ namespace SGui {
 
 
     // Draws the Gui (active window)
-    void draw();
+    void draw() const;
 
   };
-
-  // Thread function to poll the trackball for input
-  void pollTrackballTask(GUIManager param);
 
 }

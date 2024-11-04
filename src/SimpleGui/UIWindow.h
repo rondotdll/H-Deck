@@ -2,7 +2,7 @@
 
 #include <TFT_eSPI.h>
 
-#include "init.h"
+#include "types.h"
 #include "helper.h"
 #include "UIContainer.h"
 

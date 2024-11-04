@@ -8,7 +8,6 @@
 
 #include "helper.h"
 #include "types.h"
-#include "init.h"
 #include "pins.h"
 
 #include "UIComponent.h"
@@ -19,5 +18,7 @@
 #include "GuiManager.h"
 
 namespace SGui {
-
+  // Initialize the TFT display
+  // returns a pointer to the TFT_eSPI object
+  GUIManager* Init();
 };

@@ -9,37 +9,52 @@
 
 constexpr double frame_sleep = 1000 / MAX_FRAMERATE;
 
-void powerBoard() {
+__always_inline void powerBoard() {
   pinMode(POWER_ON_P, OUTPUT);
   digitalWrite(POWER_ON_P, HIGH);
 }
 
-void powerTFT() {
+__always_inline void powerTFT() {
   pinMode(TFT_BACKLIGHT_P, OUTPUT);
   digitalWrite(TFT_BACKLIGHT_P, HIGH);
 }
 
-static SGui::GUIManager gui;
+static SGui::UIWindow* window;
+static SGui::GUIManager* gui;
 
 void setup() {
   Serial.begin(115200);
 
-  powerTFT();
   powerBoard();
+  pinMode(TFT_BACKLIGHT_P, OUTPUT);
+  digitalWrite(TFT_BACKLIGHT_P, HIGH);
 
-  gui = SGui::GUIManager();
+  gui = SGui::Init();
+  gui->enable_inputs();
 
-  SGui::UIWindow window = SGui::UIWindow();
-  window.SetColor(TFT_RED)
-    ->SetTitle("Example Window")
-    ->AddChild(
-        new SGui::UILabel("Hello, World!\nThis is a basic UI example to verify the code is working properly.")
+  window = new SGui::UIWindow();
+  window->SetColor(TFT_RED);
+  window->SetTitle("Example Window");
+  window->AddChild(
+      new SGui::UILabel("Hello, World!")
     );
 
-  gui.add_window(&window);
-  gui.set_active_window(&window);
+  gui->add_window(window);
 
-  Serial.println("Setup Finished.");
+  gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_PRESS},
+    [](SGui::GUIManager* self) {
+      self->get_active_window()->SetColor(TFT_GREEN);
+  });
+
+  gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_UP},
+    [](SGui::GUIManager* self) {
+      self->get_active_window()->SetColor(TFT_YELLOW);
+  });
+
+  gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_LEFT},
+    [](SGui::GUIManager* self) {
+      self->get_active_window()->SetColor(TFT_RED);
+  });
 
 }
 
@@ -50,8 +65,7 @@ void loop() {
    * 3.) Update UI
    * 4.) Render
    */
-    Serial.println("Looped.");
-  Serial.println(gui.get_active_window()->title_);
-  // gui.draw();
-  // delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
+  gui->handle_inputs();
+  gui->draw();
+  delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
 }
