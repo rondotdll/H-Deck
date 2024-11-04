@@ -53,8 +53,8 @@ namespace SGui {
   // Handles ALL inputs currently queued in the input_queue
   handler_exception_t GUIManager::handle_inputs() {
     while (!input_queue_.empty()) {
-      Serial.println(input_queue_.size());
       handler_exception_t status = handle(input_queue_[0]);
+
       if (status == BAD_HANDLER) {
         Serial.println("ERROR");
         return status;

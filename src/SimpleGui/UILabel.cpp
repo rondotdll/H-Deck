@@ -15,7 +15,8 @@ namespace SGui {
     return this;
   }
 
-  // Set the text size of the label
+  // Set the text size of the label (in pt)
+  // Default: 1
   UILabel* UILabel::SetTextSize(int text_size) {
       this->text_size_ = text_size;
       return this;

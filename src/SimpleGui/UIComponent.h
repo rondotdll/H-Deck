@@ -40,6 +40,10 @@ private:
   // Set the position of the component
   UIComponent* SetPos(int x, int y);
 
+  // Moves the position of the component
+  // (Similar to set, but adds or subtracts relative to the current position)
+  UIComponent* MovePos(int x, int y);
+
   // Set the size of the component
   UIComponent* SetSize(int w, int h);
 

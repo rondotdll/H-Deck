@@ -26,7 +26,8 @@ class UILabel : public UIComponent {
   // Set the text of the label
   UILabel* SetText(String text);
 
-  // Set the text size of the label
+  // Set the text size of the label (in pt)
+  // Default: 1
   UILabel* SetTextSize(int text_size);
 
   // Set the text color of the label

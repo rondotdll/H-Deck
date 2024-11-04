@@ -29,7 +29,7 @@ class UIContainer : public UIComponent {
   virtual UIContainer* AddChild(UIComponent* child);
 
   // Add multiple child components to the container
-  virtual UIContainer* AddChildren(std::vector<UIComponent*>* children);
+  virtual UIContainer* AddChildren(std::vector<UIComponent*> children);
 
 };
 }  // namespace SGui

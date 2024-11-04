@@ -24,13 +24,9 @@ namespace SGui {
     return this;
   }
 
-  UIContainer* UIContainer::AddChildren(std::vector<UIComponent*>* children) {
-    for (UIComponent* child : *children) {
-      if (v_includes(this->children_, child))
-        continue;
-
-      this->children_.push_back(child);
-      child->SetParent(this);
+  UIContainer* UIContainer::AddChildren(std::vector<UIComponent*> children) {
+    for (UIComponent* child : children) {
+      this->AddChild(child);
     }
     return this;
   }

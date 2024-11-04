@@ -88,6 +88,12 @@ namespace SGui {
     return this;
   }
 
+  UIComponent* UIComponent::MovePos(int x, int y) {
+    this->pos_.x += x;
+    this->pos_.y += y;
+    return this;
+  }
+
   // Set the size of the component
   UIComponent* UIComponent::SetSize(int w, int h) {
     this->size_.x = w;
