@@ -30,16 +30,16 @@ public:
   bool isAbsolute() const {return absolute_;}
 
   // Enable or disable absolute positioning for the component
-  void absolute(bool enabled);
+  UIComponent* absolute(bool enabled = true);
 
   // Modify position to move the component into the bounds of its parent
-  void MoveIntoParentBounds();
+  UIComponent* MoveIntoParentBounds();
 
   // Resize the component to fill its parent
-  void FillParent();
+  UIComponent* FillParent();
 
   // Align the component relative to its parent
-  void AlignToParent(UIAlignment alignment);
+  UIComponent* AlignToParent(UIAlignment alignment);
 
   // Set the position of the component
   UIComponent* SetPos(int x, int y);

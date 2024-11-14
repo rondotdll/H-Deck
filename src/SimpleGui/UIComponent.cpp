@@ -6,7 +6,7 @@
 namespace SGui {
 
   // Modify position to move the component into the bounds of its parent
-  void UIComponent::MoveIntoParentBounds() {
+  UIComponent* UIComponent::MoveIntoParentBounds() {
     UIContainer* parent = static_cast<UIContainer*>(this->parent_);
 
     this->pos_.x += parent->pos_.x              // account for parent x position
@@ -16,15 +16,17 @@ namespace SGui {
     this->pos_.y += parent->pos_.y              // account for parent position
                   + parent->padding_.top       // account for parent padding
                   + parent->border_size_.top;  // account for parent border
+
+    return this;
   }
 
 
   // Resize the component to fill its parent
-  void UIComponent::FillParent() {
+  UIComponent* UIComponent::FillParent() {
     if (parent_ == nullptr)
-      return;
+      return this;
 
-    UIContainer* parent = static_cast<UIContainer*>(parent_);
+    auto* parent = static_cast<UIContainer*>(parent_);
 
     this->SetSize(parent->size_.x - (parent->padding_.left + parent->padding_.right) // account for X padding
                                  - (parent->border_size_.left + parent->border_size_.right), // Account for X border
@@ -32,16 +34,23 @@ namespace SGui {
                   parent->size_.y - (parent->padding_.top + parent->padding_.bottom) // Account for Y padding
                                  - (parent->border_size_.top + parent->border_size_.bottom) // Account for Y border
     );
+
+    return this;
   }
 
-  void UIComponent::absolute(bool enabled = true) {
+  UIComponent* UIComponent::absolute(bool enabled) {
     this->absolute_ = enabled;
+    if (!this->absolute_) {
+      this->SetPos(0,0);
+      this->MoveIntoParentBounds(); // re-assign its relative position
+    }
+    return this;
   }
 
   // Align the component relative to its parent
-  void UIComponent::AlignToParent(UIAlignment alignment) {
+  UIComponent* UIComponent::AlignToParent(UIAlignment alignment) {
     if (parent_ == nullptr)
-      return;
+      return this;
 
     switch (alignment) {
       case TOP_LEFT:
@@ -81,6 +90,7 @@ namespace SGui {
         this->pos_.y = parent_->size_.y - this->size_.y;
         break;
     }
+    return this;
   }
 
   // Set the position of the component
