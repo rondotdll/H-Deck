@@ -21,6 +21,13 @@ namespace SGui {
     BOTTOM_RIGHT
   };
 
+  enum UIOrientation {
+    HORIZONTAL,
+    VERTICAL,
+    // HORIZONTAL_R, // unused / commented for simplicity.
+    // VERTICAL_R
+  };
+
   // Input types for input events
   enum input_type_t {
     BASIC = 1,

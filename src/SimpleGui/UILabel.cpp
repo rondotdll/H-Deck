@@ -10,16 +10,18 @@ namespace SGui {
   // Set the text of the label
   UILabel* UILabel::SetText(String text) {
     this->text_ = text;
-    this->size_.x = tft.textWidth(text);
-    this->size_.y = tft.fontHeight();
+    this->size_.x = tft.textWidth(text) * this->text_size_;
+    this->size_.y = tft.fontHeight() * this->text_size_;
     return this;
   }
 
   // Set the text size of the label (in pt)
   // Default: 1
   UILabel* UILabel::SetTextSize(int text_size) {
-      this->text_size_ = text_size;
-      return this;
+    this->text_size_ = text_size;
+    this->size_.x = tft.textWidth(this->text_) * this->text_size_;
+    this->size_.y = tft.fontHeight() * this->text_size_;
+    return this;
   }
 
   // Set the text color of the label

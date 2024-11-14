@@ -38,7 +38,7 @@ void setup() {
   window->AddChildren(
       {
         (new SGui::UILabel("Hello, World!"))->SetTextSize(2),
-        (new SGui::UILabel("This is an example application using the SGui library!"))->MovePos(0, 16)
+        (new SGui::UILabel("This is an example application using the SGui library!"))
       }
     );
 

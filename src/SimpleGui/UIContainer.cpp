@@ -15,12 +15,31 @@ namespace SGui {
   }
 
   UIContainer* UIContainer::AddChild(UIComponent* child) {
+     // No duplicate children
     if (v_includes(this->children_, child))
       return this;
+
 
     this->children_.push_back(child);
     child->SetParent(this);
     child->MoveIntoParentBounds();
+
+    // Check if child has rel positioning
+    if (!child->isAbsolute()) {
+      switch(this->orientation_) {
+        case VERTICAL:
+          child->MovePos(0, this->content_size_.y);
+          this->content_size_.y += child->size_.y;
+          break;
+        case HORIZONTAL:
+          child->MovePos(this->content_size_.x, 0);
+          this->content_size_.x += child->size_.x;
+          break;
+
+        default:
+          break;
+      }
+    }
     return this;
   }
 

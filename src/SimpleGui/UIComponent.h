@@ -10,8 +10,8 @@ namespace SGui {
 class UIComponent {
 private:
   bool isInput_ = false;
- public:
-
+  bool absolute_ = false;  // positioning mode
+public:
   SGPoint pos_{0, 0}; // 2D point representing position
   SGRect size_{0, 0}; // 2D point representing size
 
@@ -27,6 +27,10 @@ private:
   virtual void Draw() = 0;
 
   bool isInput() const {return isInput_;}
+  bool isAbsolute() const {return absolute_;}
+
+  // Enable or disable absolute positioning for the component
+  void absolute(bool enabled);
 
   // Modify position to move the component into the bounds of its parent
   void MoveIntoParentBounds();

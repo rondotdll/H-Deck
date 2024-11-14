@@ -11,9 +11,11 @@ namespace SGui {
 // (All NESTING components should inherit from this class)
 class UIContainer : public UIComponent {
  public:
+  UIOrientation orientation_ = VERTICAL;
   std::vector<UIComponent*> children_ = {};
-  SGBorderSize border_size_{1, 1, 1, 1};
-  SGBoxSpacing padding_{0, 0, 0, 0};
+  SGBorderSize border_size_ {1, 1, 1, 1};
+  SGBoxSpacing padding_ {0, 0, 0, 0};
+  SGRect content_size_ {0, 0};
 
   UIContainer() = default; // default constructor
   explicit UIContainer(SGBoxSpacing padding, SGBorderSize border_size, std::vector<UIComponent*> children)

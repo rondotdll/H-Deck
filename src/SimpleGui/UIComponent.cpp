@@ -34,7 +34,9 @@ namespace SGui {
     );
   }
 
-
+  void UIComponent::absolute(bool enabled = true) {
+    this->absolute_ = enabled;
+  }
 
   // Align the component relative to its parent
   void UIComponent::AlignToParent(UIAlignment alignment) {
