@@ -1,14 +1,9 @@
 #pragma once
 
-#include "SimpleGui.h"
 #include "UIComponent.h"
+#include "types.h"
 
 namespace SGui {
-
-struct Point2D {
-  uint16_t x;
-  uint16_t y;
-};
 
 // UILabel class for displaying text on the screen
 class UILabel : public UIComponent {
@@ -26,12 +21,12 @@ class UILabel : public UIComponent {
   // Set the text of the label
   UILabel* SetText(String text);
 
-  // Set the text size of the label (in pt)
+  // Set the text size multiplier of the label
   // Default: 1
   UILabel* SetTextSize(int text_size);
 
   // Set the text color of the label
-  UILabel* SetColor(color_t color);
+  UILabel* SetTextColor(color_t color);
 
   // Get the label text
   String GetText() const { return this->text_; }

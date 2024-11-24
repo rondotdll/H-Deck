@@ -25,7 +25,7 @@ namespace SGui {
   }
 
   // Set the text color of the label
-  UILabel* UILabel::SetColor(color_t color) {
+  UILabel* UILabel::SetTextColor(color_t color) {
       this->color_ = color;
       return this;
   }

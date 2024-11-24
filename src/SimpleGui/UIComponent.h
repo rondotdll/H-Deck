@@ -26,6 +26,9 @@ public:
   // Draw the component
   virtual void Draw() = 0;
 
+  // Get the rendered size of the component
+  virtual SGRect GetRenderedSize() const { return size_; }
+
   bool isInput() const {return isInput_;}
   bool isAbsolute() const {return absolute_;}
 
