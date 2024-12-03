@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UIComponent.h"
-#include "types.h"
+#include "../types.h"
 
 namespace SGui {
 class UIButton : public UIComponent {
@@ -12,7 +12,7 @@ class UIButton : public UIComponent {
   color_t color_ = TFT_WHITE;
   color_t bg_color_ = TFT_RED;
 
-  SGBoxSpacing padding_ = {2, 2, 2, 2};
+  UIBoxSpacing padding_ = {2, 2, 2, 2};
 
   bool is_focused_ = false;
   e_handler_t click_handler_ = nullptr;
@@ -43,7 +43,7 @@ class UIButton : public UIComponent {
   // Set the button padding
   UIButton* SetPadding(int x, int y);
   UIButton* SetPadding(int top, int left, int bottom, int right);
-  UIButton* SetPadding(SGBoxSpacing padding);
+  UIButton* SetPadding(UIBoxSpacing padding);
 
   // Get the button text
   String GetText() const { return this->text_; }

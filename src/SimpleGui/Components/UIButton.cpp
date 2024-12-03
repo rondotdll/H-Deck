@@ -62,7 +62,7 @@ namespace SGui {
       this->padding_.right = right;
       return this;
   }
-  UIButton* UIButton::SetPadding(SGBoxSpacing padding) {
+  UIButton* UIButton::SetPadding(UIBoxSpacing padding) {
       this->padding_ = padding;
       return this;
   }

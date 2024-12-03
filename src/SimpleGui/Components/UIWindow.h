@@ -2,15 +2,15 @@
 
 #include <TFT_eSPI.h>
 
-#include "types.h"
-#include "helper.h"
+#include "../types.h"
+#include "../helper.h"
 #include "UIContainer.h"
 
 namespace SGui {
 // Window Component
 class UIWindow : public UIContainer {
  public:
-  const SGBoxSpacing title_padding{4, 4, 4, 4};
+  const UIBoxSpacing title_padding{4, 4, 4, 4};
   String title_ = ""; // Window title
   color_t color_ = TFT_WHITE; // Window color
 

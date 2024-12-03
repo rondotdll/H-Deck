@@ -61,7 +61,7 @@ namespace SGui {
     uint16_t right;
     uint16_t bottom;
     uint16_t left;
-  } SGBoxSpacing, SGBorderSize;
+  } UIBoxSpacing;
 
   typedef std::function<void()> e_handler_t;  // Event handler type
   typedef int color_t;                        // Color type

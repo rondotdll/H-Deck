@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UIComponent.h"
-#include "types.h"
+#include "../types.h"
 
 namespace SGui {
 

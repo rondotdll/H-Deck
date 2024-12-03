@@ -10,10 +10,10 @@
 #include "types.h"
 #include "pins.h"
 
-#include "UIComponent.h"
-#include "UIContainer.h"
-#include "UILabel.h"
-#include "UIWindow.h"
+#include "Components/UIComponent.h"
+#include "Components/UIContainer.h"
+#include "Components/UILabel.h"
+#include "Components/UIWindow.h"
 
 #include "GuiManager.h"
 
