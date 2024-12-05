@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "UIComponent.h"
+#include "../DefaultStyles.h"
 
 namespace SGui {
 // Expanded UIComponent class for all NESTING UI components
@@ -13,13 +14,11 @@ class UIContainer : public UIComponent {
  public:
   UIOrientation orientation_ = VERTICAL;
   std::vector<UIComponent*> children_ = {};
-  SGBorderSize border_size_ {1, 1, 1, 1};
-  UIBoxSpacing padding_ {0, 0, 0, 0};
-  SGRect content_size_ {0, 0};
+  UIRect content_size_ {0, 0};
 
   UIContainer() = default; // default constructor
-  explicit UIContainer(UIBoxSpacing padding, SGBorderSize border_size, std::vector<UIComponent*> children)
-      : UIComponent(), border_size_(border_size), padding_(padding), children_(std::move(children)) {}
+  explicit UIContainer(std::vector<UIComponent*> children)
+      : UIComponent(), children_(std::move(children)) {}
 
   // Draw just the children of the component (not the component itself)
   void DrawChildren();

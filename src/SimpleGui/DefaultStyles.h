@@ -1,0 +1,21 @@
+#pragma once
+
+#include "UIStyle.h"
+
+namespace SGui{
+  static UIStyle* DEFAULT_STYLE = new UIStyle(
+    (UIColor)RED, // foreground
+    (UIColor)BLACK, // background
+    (UIColor)RED, // border color
+    1, // border thickness
+    1, // text size
+    UIBoxSpacing{
+      0,
+      0,
+      0,
+      0
+    } // padding
+  );
+
+  static UIStyle* DEFAULT_STYLE_FOCUSED = new UIStyle(DEFAULT_STYLE->HighContrast());
+}

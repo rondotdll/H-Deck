@@ -10,6 +10,9 @@
 #include "types.h"
 #include "pins.h"
 
+#include "UIColor.h"
+#include "UIStyle.h"
+
 #include "Components/UIComponent.h"
 #include "Components/UIContainer.h"
 #include "Components/UILabel.h"

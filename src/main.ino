@@ -33,7 +33,7 @@ void setup() {
   gui->enable_inputs();
 
   window = new SGui::UIWindow();
-  window->SetColor(TFT_RED);
+  window->SetColor((SGui::UIColor)RED);
   window->SetTitle("Example Window");
   window->AddChildren(
       {
@@ -46,17 +46,17 @@ void setup() {
 
   gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_PRESS},
     [](SGui::GUIManager* self) {
-      self->get_active_window()->SetColor(TFT_GREEN);
+      self->get_active_window()->SetColor((SGui::UIColor)GREEN);
   });
 
   gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_UP},
     [](SGui::GUIManager* self) {
-      self->get_active_window()->SetColor(TFT_YELLOW);
+      self->get_active_window()->SetColor((SGui::UIColor)BLUE);
   });
 
   gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_LEFT},
     [](SGui::GUIManager* self) {
-      self->get_active_window()->SetColor(TFT_RED);
+      self->get_active_window()->SetColor((SGui::UIColor)RED);
   });
 
 }

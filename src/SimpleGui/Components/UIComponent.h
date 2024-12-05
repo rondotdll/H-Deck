@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../types.h"
+#include "../UIStyle.h"
+#include "../DefaultStyles.h"
 
 namespace SGui {
 
@@ -12,22 +14,25 @@ private:
   bool isInput_ = false;
   bool absolute_ = false;  // positioning mode
 public:
-  SGPoint pos_{0, 0}; // 2D point representing position
-  SGRect size_{0, 0}; // 2D point representing size
+  UIPoint pos_{0, 0}; // 2D point representing position
+  UIRect size_{0, 0}; // 2D point representing size
+
+  UIStyle* style_ = nullptr;
+  UIStyle* focused_style_ = nullptr;
 
   bool focused_ = false; // focused state (unused)
   UIComponent* parent_ = nullptr;
 
   UIComponent() = default; // default constructor
-  explicit UIComponent(SGPoint position, SGRect dimensions,
+  explicit UIComponent(UIPoint position, UIRect dimensions, UIStyle* style = DEFAULT_STYLE, UIStyle* focused_style = DEFAULT_STYLE_FOCUSED,
                        UIComponent* parent = nullptr)
-      : pos_(position), size_(dimensions), parent_(parent) {}
+      : pos_(position), size_(dimensions), style_(style), focused_style_(focused_style), parent_(parent) {}
 
   // Draw the component
   virtual void Draw() = 0;
 
   // Get the rendered size of the component
-  virtual SGRect GetRenderedSize() const { return size_; }
+  virtual UIRect GetRenderedSize() const { return size_; }
 
   bool isInput() const {return isInput_;}
   bool isAbsolute() const {return absolute_;}

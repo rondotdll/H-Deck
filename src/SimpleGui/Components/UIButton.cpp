@@ -13,31 +13,19 @@ namespace SGui {
     this->text_ = text;
 
     // Update the size of the button
-    this->size_.x = tft.textWidth(text) * this->text_size_;
-    this->size_.y = tft.fontHeight() * this->text_size_;
+    this->size_.x = tft.textWidth(text) * this->style_->text_size_;
+    this->size_.y = tft.fontHeight() * this->style_->text_size_;
     return this;
   }
 
   // Set the text size of the button
   // Default: 1
-  UIButton* UIButton::SetTextSize(int text_size) {
-    this->text_size_ = text_size;
+  UIButton* UIButton::SetTextSize(uint8_t text_size) {
+    this->style_->SetTextSize(text_size);
 
     // Update the size of the button
-    this->size_.x = tft.textWidth(this->text_) * this->text_size_;
-    this->size_.y = tft.fontHeight() * this->text_size_;
-    return this;
-  }
-
-  // Set the text color of the button
-  UIButton* UIButton::SetTextColor(color_t color) {
-      this->color_ = color;
-      return this;
-  }
-
-  // Set the background color of the button
-  UIButton* UIButton::SetBgColor(color_t color) {
-    this->bg_color_ = color;
+    this->size_.x = tft.textWidth(this->text_) * this->style_->text_size_;
+    this->size_.y = tft.fontHeight() * this->style_->text_size_;
     return this;
   }
 
@@ -49,21 +37,21 @@ namespace SGui {
 
   // Set the button padding
   UIButton* UIButton::SetPadding(int x, int y) {
-      this->padding_.top = y;
-      this->padding_.left = x;
-      this->padding_.bottom = y;
-      this->padding_.right = x;
+      this->style_->padding_.top = y;
+      this->style_->padding_.left = x;
+      this->style_->padding_.bottom = y;
+      this->style_->padding_.right = x;
       return this;
   }
   UIButton* UIButton::SetPadding(int top, int left, int bottom, int right) {
-      this->padding_.top = top;
-      this->padding_.left = left;
-      this->padding_.bottom = bottom;
-      this->padding_.right = right;
+      this->style_->padding_.top = top;
+      this->style_->padding_.left = left;
+      this->style_->padding_.bottom = bottom;
+      this->style_->padding_.right = right;
       return this;
   }
   UIButton* UIButton::SetPadding(UIBoxSpacing padding) {
-      this->padding_ = padding;
+      this->style_->padding_ = padding;
       return this;
   }
 
@@ -71,20 +59,20 @@ namespace SGui {
   void UIButton::Draw() {
     // Draw the button border
     tft.drawRect(this->pos_.x, this->pos_.y,
-                  this->size_.x + (this->padding_.left + this->padding_.right),
-                  this->size_.y + (this->padding_.top + this->padding_.bottom),
-                  this->color_);
+                  this->size_.x + (this->style_->padding_.left + this->style_->padding_.right),
+                  this->size_.y + (this->style_->padding_.top + this->style_->padding_.bottom),
+                  this->style_->foreground_);
 
     // Draw the button background
     if (this->is_focused_) {
       tft.fillRect(this->pos_.x, this->pos_.y,
-                    this->size_.x + (this->padding_.left + this->padding_.right),
-                    this->size_.y + (this->padding_.top + this->padding_.bottom),
-                    this->bg_color_);
+                    this->size_.x + (this->style_->padding_.left + this->style_->padding_.right),
+                    this->size_.y + (this->style_->padding_.top + this->style_->padding_.bottom),
+                    this->focused_style_->background_);
     }
     // Draw the button text
-    tft.setTextColor(this->color_);
-    tft.setTextSize(this->text_size_);
-    tft.drawString(this->text_, this->pos_.x + this->padding_.left, this->pos_.y + this->padding_.bottom);
+    tft.setTextColor(this->style_->foreground_);
+    tft.setTextSize(this->style_->text_size_);
+    tft.drawString(this->text_, this->pos_.x + this->style_->padding_.left, this->pos_.y + this->style_->padding_.bottom);
   }
 }

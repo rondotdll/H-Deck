@@ -54,7 +54,7 @@ namespace SGui {
   typedef struct _Point2D {
     uint16_t x;
     uint16_t y;
-  } SGRect, SGPoint;
+  } UIRect, UIPoint;
 
   typedef struct _BoxSpacing {
     uint16_t top;
@@ -64,7 +64,6 @@ namespace SGui {
   } UIBoxSpacing;
 
   typedef std::function<void()> e_handler_t;  // Event handler type
-  typedef int color_t;                        // Color type
 
   // Stores specific input events (type & ID)
   typedef struct input_event_t {

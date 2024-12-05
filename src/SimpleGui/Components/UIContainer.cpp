@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-#include "helper.h"
+#include "../helper.h"
 #include "UIContainer.h"
 
 namespace SGui {
@@ -50,10 +50,10 @@ namespace SGui {
   }
 
   UIContainer* UIContainer::SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) {
-    this->padding_.top = padding_top;
-    this->padding_.right = padding_right;
-    this->padding_.bottom = padding_bottom;
-    this->padding_.left = padding_left;
+    this->style_->padding_.top = padding_top;
+    this->style_->padding_.right = padding_right;
+    this->style_->padding_.bottom = padding_bottom;
+    this->style_->padding_.left = padding_left;
     return this;
   }
 }  // namespace SGui

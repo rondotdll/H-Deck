@@ -24,15 +24,9 @@ namespace SGui {
     return this;
   }
 
-  // Set the text color of the label
-  UILabel* UILabel::SetTextColor(color_t color) {
-      this->color_ = color;
-      return this;
-  }
-
   // Draw the label
   void UILabel::Draw() {
-    tft.setTextColor(this->color_);
+    tft.setTextColor(this->style_->foreground_);
     tft.setTextSize(this->text_size_);
     tft.drawString(this->text_, this->pos_.x, this->pos_.y);
   }

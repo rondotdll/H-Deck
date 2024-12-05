@@ -10,7 +10,6 @@ class UILabel : public UIComponent {
  public:
   String text_ = "";
   int text_size_ = 1;
-  color_t color_ = TFT_WHITE;
 
   explicit UILabel(String text) : UIComponent() {
       this->text_ = text;
@@ -25,17 +24,11 @@ class UILabel : public UIComponent {
   // Default: 1
   UILabel* SetTextSize(int text_size);
 
-  // Set the text color of the label
-  UILabel* SetTextColor(color_t color);
-
   // Get the label text
   String GetText() const { return this->text_; }
 
   // Get the text size of the label
   int GetTextSize() const { return this->text_size_; }
-
-  // Get the text color of the label
-  color_t GetTextColor() const { return this->color_; }
 
   // Draw the label
   void Draw() override;

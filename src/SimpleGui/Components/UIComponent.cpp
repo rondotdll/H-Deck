@@ -10,12 +10,12 @@ namespace SGui {
     UIContainer* parent = static_cast<UIContainer*>(this->parent_);
 
     this->pos_.x += parent->pos_.x              // account for parent x position
-                    + parent->padding_.left      // account for parent x padding
-                    + parent->border_size_.left; // account for parent x border
+                    + parent->style_->padding_.left       // account for parent x padding
+                    + parent->style_->border_thickness_;  // account for parent x border
 
     this->pos_.y += parent->pos_.y              // account for parent position
-                  + parent->padding_.top       // account for parent padding
-                  + parent->border_size_.top;  // account for parent border
+                    + parent->style_->padding_.top        // account for parent padding
+                    + parent->style_->border_thickness_;  // account for parent border
 
     return this;
   }
@@ -28,11 +28,11 @@ namespace SGui {
 
     auto* parent = static_cast<UIContainer*>(parent_);
 
-    this->SetSize(parent->size_.x - (parent->padding_.left + parent->padding_.right) // account for X padding
-                                 - (parent->border_size_.left + parent->border_size_.right), // Account for X border
+    this->SetSize(parent->size_.x - (parent->style_->padding_.left + parent->style_->padding_.right) // account for X padding
+                                 - (2 * parent->style_->border_thickness_), // Account for X border
 
-                  parent->size_.y - (parent->padding_.top + parent->padding_.bottom) // Account for Y padding
-                                 - (parent->border_size_.top + parent->border_size_.bottom) // Account for Y border
+                  parent->size_.y - (parent->style_->padding_.top + parent->style_->padding_.bottom) // Account for Y padding
+                                 - (2 * parent->style_->border_thickness_) // Account for Y border
     );
 
     return this;

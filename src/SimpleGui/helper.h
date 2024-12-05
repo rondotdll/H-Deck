@@ -20,8 +20,4 @@ inline bool v_includes(const std::vector<T>& vec, const T& value) {
     return false;
   return std::find(vec.begin(), vec.end(), value) != vec.end();
 }
-
-
-// Determine the appropriate text color (black or white) based on background color
-color_t getContrast(color_t bg);
 }
