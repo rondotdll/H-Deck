@@ -1,18 +1,20 @@
 #pragma once
 
+#include <vector>
+
 #include "../types.h"
 #include "../UIStyle.h"
 #include "../DefaultStyles.h"
 
 namespace SGui {
-
 // Base class for all UI components
 // Stores position, size, and parent component
 // (All components should inherit from this class)
-class UIComponent {
+class Component {
 private:
   bool isInput_ = false;
   bool absolute_ = false;  // positioning mode
+
 public:
   UIPoint pos_{0, 0}; // 2D point representing position
   UIRect size_{0, 0}; // 2D point representing size
@@ -21,11 +23,11 @@ public:
   UIStyle* focused_style_ = nullptr;
 
   bool focused_ = false; // focused state (unused)
-  UIComponent* parent_ = nullptr;
+  Component* parent_ = nullptr;
 
-  UIComponent() = default; // default constructor
-  explicit UIComponent(UIPoint position, UIRect dimensions, UIStyle* style = DEFAULT_STYLE, UIStyle* focused_style = DEFAULT_STYLE_FOCUSED,
-                       UIComponent* parent = nullptr)
+  Component() = default; // default constructor
+  explicit Component(UIPoint position, UIRect dimensions, UIStyle* style = DEFAULT_STYLE, UIStyle* focused_style = DEFAULT_STYLE_FOCUSED,
+                       Component* parent = nullptr)
       : pos_(position), size_(dimensions), style_(style), focused_style_(focused_style), parent_(parent) {}
 
   // Draw the component
@@ -38,28 +40,49 @@ public:
   bool isAbsolute() const {return absolute_;}
 
   // Enable or disable absolute positioning for the component
-  UIComponent* absolute(bool enabled = true);
+  Component* absolute(bool enabled = true);
+
+  // Get the width of the component
+  __always_inline uint16_t width() const { return this->size_.x; }
+  // Get the height of the component
+  __always_inline uint16_t height() const { return this->size_.y; }
+  // Get the x position of the component
+  __always_inline uint16_t x() const { return this->pos_.x; }
+  // Get the y position of the component
+  __always_inline uint16_t y() const {return this->pos_.y; }
+  // Get the center of the component
+  UIPoint get_center() const {
+    return {
+      (uint16_t)(this->x() - (this->width() / 2)),
+      (uint16_t)(this->y() - (this->height() / 2))
+    };
+  }
+
+  virtual std::vector<Component*> get_children() { return { this }; };
 
   // Modify position to move the component into the bounds of its parent
-  UIComponent* MoveIntoParentBounds();
+  Component* MoveIntoParentBounds();
 
   // Resize the component to fill its parent
-  UIComponent* FillParent();
+  Component* FillParent();
 
   // Align the component relative to its parent
-  UIComponent* AlignToParent(UIAlignment alignment);
+  Component* AlignToParent(UIAlignment alignment);
 
   // Set the position of the component
-  UIComponent* SetPos(int x, int y);
+  Component* SetPos(int x, int y);
 
   // Moves the position of the component
   // (Similar to set, but adds or subtracts relative to the current position)
-  UIComponent* MovePos(int x, int y);
+  Component* MovePos(int x, int y);
 
   // Set the size of the component
-  UIComponent* SetSize(int w, int h);
+  Component* SetSize(int w, int h);
 
   // Set the parent of the component
-  UIComponent* SetParent(UIComponent* parent);
+  Component* SetParent(Component* parent);
 };
+
+typedef std::vector<Component*> ComponentList;
+
 }  // namespace SGui

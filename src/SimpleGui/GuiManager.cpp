@@ -66,7 +66,7 @@ namespace SGui {
   }
 
   // Adds a window to the viewport
-  void GUIManager::add_window(UIWindow* window) {
+  void GUIManager::add_window(Window* window) {
     this->viewport_.push_back(window);
     if (this->active_window_ == nullptr) {
       this->active_window_ = window;
@@ -74,7 +74,7 @@ namespace SGui {
   }
 
   // Removes a window from the viewport
-  void GUIManager::remove_window(UIWindow* window) {
+  void GUIManager::remove_window(Window* window) {
     if (this->active_window_ == window) {
       this->active_window_ = nullptr;
     }
@@ -82,7 +82,7 @@ namespace SGui {
   }
 
   // Sets the active window (window to be drawn
-  void GUIManager::set_active_window(UIWindow* window) {
+  void GUIManager::set_active_window(Window* window) {
     this->active_window_ = window;
   }
 

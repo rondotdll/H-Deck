@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include <unordered_map>
 
 #include <TFT_eSPI.h>
 
@@ -24,8 +23,6 @@ namespace SGui {
   enum UIOrientation {
     HORIZONTAL,
     VERTICAL,
-    // HORIZONTAL_R, // unused / commented for simplicity.
-    // VERTICAL_R
   };
 
   // Input types for input events

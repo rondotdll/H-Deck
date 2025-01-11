@@ -1,28 +1,28 @@
 #pragma once
 
-#include "UIComponent.h"
+#include "Component.h"
 #include "../types.h"
 
 namespace SGui {
 
 // UILabel class for displaying text on the screen
-class UILabel : public UIComponent {
+class Label : public Component {
  public:
   String text_ = "";
   int text_size_ = 1;
 
-  explicit UILabel(String text) : UIComponent() {
+  explicit Label(String text) : Component() {
       this->text_ = text;
       this->size_.x = tft.textWidth(text);
       this->size_.y = tft.fontHeight();
   };
 
   // Set the text of the label
-  UILabel* SetText(String text);
+  Label* SetText(String text);
 
   // Set the text size multiplier of the label
   // Default: 1
-  UILabel* SetTextSize(int text_size);
+  Label* SetTextSize(int text_size);
 
   // Get the label text
   String GetText() const { return this->text_; }

@@ -1,13 +1,13 @@
 #include <algorithm>
 
-#include "UIComponent.h"
-#include "UIContainer.h"
+#include "Component.h"
+#include "Container.h"
 
 namespace SGui {
 
   // Modify position to move the component into the bounds of its parent
-  UIComponent* UIComponent::MoveIntoParentBounds() {
-    UIContainer* parent = static_cast<UIContainer*>(this->parent_);
+  Component* Component::MoveIntoParentBounds() {
+    Container* parent = static_cast<Container*>(this->parent_);
 
     this->pos_.x += parent->pos_.x              // account for parent x position
                     + parent->style_->padding_.left       // account for parent x padding
@@ -22,11 +22,11 @@ namespace SGui {
 
 
   // Resize the component to fill its parent
-  UIComponent* UIComponent::FillParent() {
+  Component* Component::FillParent() {
     if (parent_ == nullptr)
       return this;
 
-    auto* parent = static_cast<UIContainer*>(parent_);
+    auto* parent = static_cast<Container*>(parent_);
 
     this->SetSize(parent->size_.x - (parent->style_->padding_.left + parent->style_->padding_.right) // account for X padding
                                  - (2 * parent->style_->border_thickness_), // Account for X border
@@ -38,7 +38,7 @@ namespace SGui {
     return this;
   }
 
-  UIComponent* UIComponent::absolute(bool enabled) {
+  Component* Component::absolute(bool enabled) {
     this->absolute_ = enabled;
     if (!this->absolute_) {
       this->SetPos(0,0);
@@ -48,7 +48,7 @@ namespace SGui {
   }
 
   // Align the component relative to its parent
-  UIComponent* UIComponent::AlignToParent(UIAlignment alignment) {
+  Component* Component::AlignToParent(UIAlignment alignment) {
     if (parent_ == nullptr)
       return this;
 
@@ -94,27 +94,27 @@ namespace SGui {
   }
 
   // Set the position of the component
-  UIComponent* UIComponent::SetPos(int x, int y) {
+  Component* Component::SetPos(int x, int y) {
     this->pos_.x = x;
     this->pos_.y = y;
     return this;
   }
 
-  UIComponent* UIComponent::MovePos(int x, int y) {
+  Component* Component::MovePos(int x, int y) {
     this->pos_.x += x;
     this->pos_.y += y;
     return this;
   }
 
   // Set the size of the component
-  UIComponent* UIComponent::SetSize(int w, int h) {
+  Component* Component::SetSize(int w, int h) {
     this->size_.x = w;
     this->size_.y = h;
     return this;
   }
 
   // Set the parent of the component
-  UIComponent* UIComponent::SetParent(UIComponent* parent) {
+  Component* Component::SetParent(Component* parent) {
     this->parent_ = parent;
 
     return this;

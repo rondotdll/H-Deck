@@ -2,23 +2,23 @@
 // Created by david on 8/24/2024.
 //
 
-#include "UIWindow.h"
+#include "Window.h"
 
 namespace SGui {
 // Set the title of the window
-UIWindow* UIWindow::SetTitle(String title) {
+Window* Window::SetTitle(String title) {
   this->title_ = title;
   return this;
 }
 
 // Set the color of the window
-UIWindow* UIWindow::SetColor(UIColor color) {
+Window* Window::SetColor(UIColor color) {
   this->style_->SetBorderColor(color);
   return this;
 }
 
 // Set the padding of the container (accounts for window border and title bar)
-UIContainer* UIWindow::SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) {
+Container* Window::SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) {
   this->style_->padding_.top = padding_top + this->title_padding.top + this->title_padding.bottom + tft.fontHeight();
   this->style_->padding_.right = padding_right;
   this->style_->padding_.bottom = padding_bottom;
@@ -27,7 +27,7 @@ UIContainer* UIWindow::SetPadding(int padding_top, int padding_right, int paddin
 }
 
 // Draw the window and its children
-void UIWindow::Draw() {
+void Window::Draw() {
   // If the window is inside a container, adjust its position accordingly.
   if (this->parent_ != nullptr) {
     this->MoveIntoParentBounds();

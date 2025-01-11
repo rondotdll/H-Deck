@@ -4,11 +4,11 @@
 
 #include <TFT_eSPI.h>
 
-#include "UILabel.h"
+#include "Label.h"
 
 namespace SGui {
   // Set the text of the label
-  UILabel* UILabel::SetText(String text) {
+  Label* Label::SetText(String text) {
     this->text_ = text;
     this->size_.x = tft.textWidth(text) * this->text_size_;
     this->size_.y = tft.fontHeight() * this->text_size_;
@@ -17,7 +17,7 @@ namespace SGui {
 
   // Set the text size of the label (in pt)
   // Default: 1
-  UILabel* UILabel::SetTextSize(int text_size) {
+  Label* Label::SetTextSize(int text_size) {
     this->text_size_ = text_size;
     this->size_.x = tft.textWidth(this->text_) * this->text_size_;
     this->size_.y = tft.fontHeight() * this->text_size_;
@@ -25,7 +25,7 @@ namespace SGui {
   }
 
   // Draw the label
-  void UILabel::Draw() {
+  void Label::Draw() {
     tft.setTextColor(this->style_->foreground_);
     tft.setTextSize(this->text_size_);
     tft.drawString(this->text_, this->pos_.x, this->pos_.y);

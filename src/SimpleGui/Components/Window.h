@@ -4,16 +4,16 @@
 
 #include "../types.h"
 #include "../helper.h"
-#include "UIContainer.h"
+#include "Container.h"
 
 namespace SGui {
 // Window Component
-class UIWindow : public UIContainer {
+class Window : public Container {
  public:
   const UIBoxSpacing title_padding{4, 4, 4, 4};
   String title_ = ""; // Window title
 
-  explicit UIWindow() : UIContainer() {
+  explicit Window() : Container() {
     if (this->size_.x == 0)
       this->size_.x = TFT_WIDTH;
     if (this->size_.y == 0)
@@ -28,13 +28,13 @@ class UIWindow : public UIContainer {
   };
 
   // Set the title of the window
-  UIWindow* SetTitle(String title);
+  Window* SetTitle(String title);
 
   // Set the color of the window
-  UIWindow* SetColor(UIColor color);
+  Window* SetColor(UIColor color);
 
   // Set the padding of the container (accounts for window border and title bar)
-  UIContainer* SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) override;
+  Container* SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) override;
 
   // Draw the window and its children
   void Draw() override;

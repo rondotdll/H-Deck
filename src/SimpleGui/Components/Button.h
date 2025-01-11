@@ -1,18 +1,20 @@
 #pragma once
 
-#include "UIComponent.h"
+#include "Component.h"
 #include "../types.h"
 
 namespace SGui {
-class UIButton : public UIComponent {
+class Button : public Component {
+private:
   bool isInput_ = true;
- public:
+
+public:
   String text_ = "";
 
   bool is_focused_ = false;
   e_handler_t click_handler_ = nullptr;
 
-  explicit UIButton(String text, e_handler_t &&click_handler) : UIComponent() {
+  explicit Button(String text, e_handler_t &&click_handler) : Component() {
     this->text_ = text;
     this->style_->padding_ = {2, 2, 2, 2};
     this->click_handler_ = std::move(click_handler);
@@ -21,19 +23,19 @@ class UIButton : public UIComponent {
   }
 
   // Set the text of the button
-  UIButton* SetText(String text);
+  Button* SetText(String text);
 
   // Set the text size of the button
   // Default: 1
-  UIButton* UIButton::SetTextSize(uint8_t text_size);
+  Button* SetTextSize(uint8_t text_size);
 
   // Set the click handler of the button
-  UIButton* SetClickHandler(e_handler_t &&handler);
+  Button* SetClickHandler(e_handler_t &&handler);
 
   // Set the button padding
-  UIButton* SetPadding(int x, int y);
-  UIButton* SetPadding(int top, int left, int bottom, int right);
-  UIButton* SetPadding(UIBoxSpacing padding);
+  Button* SetPadding(int x, int y);
+  Button* SetPadding(int top, int left, int bottom, int right);
+  Button* SetPadding(UIBoxSpacing padding);
 
   // Get the button text
   String GetText() const { return this->text_; }

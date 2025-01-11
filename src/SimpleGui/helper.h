@@ -10,6 +10,9 @@ namespace SGui {
 // returns (width, height)
 std::pair<int, int> GetScreenEdges();
 
+// Calculate the slope between two points
+float slope(UIPoint p1, UIPoint p2);
+
 // Clear the screen to black
 void clearScreen();
 

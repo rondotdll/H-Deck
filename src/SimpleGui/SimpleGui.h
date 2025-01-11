@@ -13,10 +13,7 @@
 #include "UIColor.h"
 #include "UIStyle.h"
 
-#include "Components/UIComponent.h"
-#include "Components/UIContainer.h"
-#include "Components/UILabel.h"
-#include "Components/UIWindow.h"
+#include "components.h"
 
 #include "GuiManager.h"
 

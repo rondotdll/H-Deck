@@ -19,7 +19,7 @@ __always_inline void powerTFT() {
   digitalWrite(TFT_BACKLIGHT_P, HIGH);
 }
 
-static SGui::UIWindow* window;
+static SGui::Window* window;
 static SGui::GUIManager* gui;
 
 void setup() {
@@ -32,13 +32,13 @@ void setup() {
   gui = SGui::Init();
   gui->enable_inputs();
 
-  window = new SGui::UIWindow();
+  window = new SGui::Window();
   window->SetColor((SGui::UIColor)RED);
   window->SetTitle("Example Window");
   window->AddChildren(
       {
-        (new SGui::UILabel("Hello, World!"))->SetTextSize(2),
-        (new SGui::UILabel("This is an example application using the SGui library!"))
+        (new SGui::Label("Hello, World!"))->SetTextSize(2),
+        (new SGui::Label("This is an example application using the SGui library!"))
       }
     );
 

@@ -4,12 +4,12 @@
 
 #include <TFT_eSPI.h>
 
-#include "UIButton.h"
+#include "Button.h"
 
 namespace SGui {
 
   // Set the text of the button
-  UIButton* UIButton::SetText(String text) {
+  Button* Button::SetText(String text) {
     this->text_ = text;
 
     // Update the size of the button
@@ -20,7 +20,7 @@ namespace SGui {
 
   // Set the text size of the button
   // Default: 1
-  UIButton* UIButton::SetTextSize(uint8_t text_size) {
+  Button* Button::SetTextSize(uint8_t text_size) {
     this->style_->SetTextSize(text_size);
 
     // Update the size of the button
@@ -30,33 +30,33 @@ namespace SGui {
   }
 
   // Set the click handler of the button
-  UIButton* UIButton::SetClickHandler(e_handler_t &&handler) {
+  Button* Button::SetClickHandler(e_handler_t &&handler) {
       this->click_handler_ = std::move(handler);
       return this;
   }
 
   // Set the button padding
-  UIButton* UIButton::SetPadding(int x, int y) {
+  Button* Button::SetPadding(int x, int y) {
       this->style_->padding_.top = y;
       this->style_->padding_.left = x;
       this->style_->padding_.bottom = y;
       this->style_->padding_.right = x;
       return this;
   }
-  UIButton* UIButton::SetPadding(int top, int left, int bottom, int right) {
+  Button* Button::SetPadding(int top, int left, int bottom, int right) {
       this->style_->padding_.top = top;
       this->style_->padding_.left = left;
       this->style_->padding_.bottom = bottom;
       this->style_->padding_.right = right;
       return this;
   }
-  UIButton* UIButton::SetPadding(UIBoxSpacing padding) {
+  Button* Button::SetPadding(UIBoxSpacing padding) {
       this->style_->padding_ = padding;
       return this;
   }
 
   // Draw the button
-  void UIButton::Draw() {
+  void Button::Draw() {
     // Draw the button border
     tft.drawRect(this->pos_.x, this->pos_.y,
                   this->size_.x + (this->style_->padding_.left + this->style_->padding_.right),
