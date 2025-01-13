@@ -28,11 +28,6 @@ namespace SGui {
   public:
 
     GUIManager() {
-      // default constructor
-      if (self_ != nullptr){
-        Serial.println("ERROR: A GUIManager instance already exists!");
-        return;
-      }
       self_ = this;
     };
 

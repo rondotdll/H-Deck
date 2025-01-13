@@ -41,6 +41,8 @@ namespace SGui {
 
       if (input_handlers_.find(id) != input_handlers_.end()) {
         try {
+          Serial.printf("Handling event %d\n", id);
+          Serial.printf("GUI manager at %p\n", self_);
           input_handlers_[id](self_); // <- this is so fucking cursed lmfao
           return OK;
         } catch (...) {

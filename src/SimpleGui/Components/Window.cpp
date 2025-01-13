@@ -32,6 +32,11 @@ namespace SGui {
     uint16_t x = this->focused_pos_.x;
     // focused y coordinate
     uint16_t y = this->focused_pos_.y;
+
+    Serial.println("Focusing next component...");
+    Serial.printf("Tree Size: %d\n", this->tree_.size());
+    Serial.printf("Current Focus Coordinate: (%d, %d)\n", x, y);
+
     switch (direction) {
       case HORIZONTAL: {
         if (x == (this->tree_.size() - 1)) return;
@@ -59,9 +64,14 @@ namespace SGui {
     uint16_t x = this->focused_pos_.x;
     // focused y coordinate
     uint16_t y = this->focused_pos_.y;
+    Serial.println("Focusing Previous Component...");
+    Serial.printf("Tree Size: %d\n", this->tree_.size());
+    Serial.printf("Current Focus Coordinate: (%d, %d)\n", x, y);
+
     switch (direction) {
       case HORIZONTAL: {
-        if (x == (this->tree_.size() - 1)) return;
+        // do nothing if already at first item
+        if (x == 0) return;
 
         this->focused_->SetFocus(false); // un-focus previously focused
         this->focused_ = this->tree_[this->focused_pos_.x - 1][this->focused_pos_.y]->SetFocus();
@@ -69,8 +79,8 @@ namespace SGui {
         break;
       }
       case VERTICAL: {
-        // do nothing if already at last item
-        if (y == (this->tree_[x].size() - 1)) return;
+        // do nothing if already at first item
+        if (y == 0) return;
 
         this->focused_->SetFocus(false); // un-focus previously focused
         this->focused_ = this->tree_[x][y - 1]->SetFocus();
@@ -95,12 +105,12 @@ namespace SGui {
       switch(this->orientation_) {
         case VERTICAL:
           child->MovePos(0, this->content_size_.y);
-        this->content_size_.y += child->GetRenderedSize().y;
-        break;
+          this->content_size_.y += child->GetRenderedSize().y;
+          break;
         case HORIZONTAL:
           child->MovePos(this->content_size_.x, 0);
-        this->content_size_.x += child->GetRenderedSize().x;
-        break;
+          this->content_size_.x += child->GetRenderedSize().x;
+          break;
 
         default:
           break;
@@ -108,7 +118,6 @@ namespace SGui {
     }
 
     auto sub_children = child->Children();
-    sub_children.erase(sub_children.begin()); // remove the child from the list
 
     if (sub_children.empty()) {
       return this;
@@ -122,13 +131,15 @@ namespace SGui {
         this->tree_.push_back({c});
         this->focused_ = c;
         this->focused_pos_ = {0, 0};
+
+        Serial.printf("Added new component to navtree: %p", c);
         return this;
       }
 
       // Scan horizontally
-      for (int x = 0; x <= this->tree_.size(); x++) {
+      for (int x = 0; x < this->tree_.size(); x++) {
         // Scan vertically
-        for (int y = 0; y <= this->tree_[x].size(); y++) {
+        for (int y = 0; y < this->tree_[x].size(); y++) {
 
           float slope_ = slope(tree_[x][y]->pos_, c->pos_);
 
@@ -152,9 +163,12 @@ namespace SGui {
           this->tree_.insert(tree_.begin() + (y - 1), {c});
 
           UPDATE_FOCUSED:
-            if (this->focused_pos_.y == y) {
-              this->focused_pos_.y += 1;
-            }
+
+          Serial.printf("Added new component to navtree: %p", c);
+          Serial.printf("Focused Position: (%d, %d)\n", this->focused_pos_.x, this->focused_pos_.y);
+          if (this->focused_pos_.y == y) {
+            this->focused_pos_.y += 1;
+          }
           if (this->focused_pos_.x == x) {
             this->focused_pos_.x += 1;
           }
@@ -165,6 +179,13 @@ namespace SGui {
     return this;
   }
 
+  // Add multiple child components to the window
+  Container* Window::AddChildren(ComponentList children) {
+    for (Component* child : children) {
+      this->AddChild(child);
+    }
+    return this;
+  }
   // Draw the window and its children
   void Window::Draw() {
     // If the window is inside a container, adjust its position accordingly.

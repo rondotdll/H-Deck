@@ -74,7 +74,7 @@ void setup() {
 
   gui->bind_input_event(SGui::input_event_t{.type=TRACKBALL, .id=TRACKBALL_RIGHT},
     [](GUIManager* self) {
-      self->get_active_window()->FocusPrev(HORIZONTAL);
+      self->get_active_window()->FocusNext(HORIZONTAL);
   });
 
 }

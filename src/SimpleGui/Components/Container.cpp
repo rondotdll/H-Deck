@@ -74,8 +74,9 @@ namespace SGui {
   }
 
   // Add multiple child components to the container
-  Container* Container::AddChildren(std::vector<Component*> children) {
+  Container* Container::AddChildren(ComponentList children) {
     for (Component* child : children) {
+      Serial.printf("Adding child %p to container\n\r", child);
       this->AddChild(child);
     }
     return this;

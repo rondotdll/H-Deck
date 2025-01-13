@@ -41,7 +41,7 @@ public:
   virtual Container* AddChild(Component* child);
 
   // Add multiple child components to the container
-  virtual Container* AddChildren(std::vector<Component*> children);
+  virtual Container* AddChildren(ComponentList children);
 
 };
 }  // namespace SGui

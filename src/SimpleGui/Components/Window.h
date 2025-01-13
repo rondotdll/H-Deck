@@ -21,7 +21,6 @@ namespace SGui {
     String title_ = ""; // Window title
 
     explicit Window() : Container() {
-      Serial.println("Checkpoint 1");
       if (this->size_.x == 0) {
         this->size_.x = TFT_WIDTH;
       }
@@ -59,6 +58,9 @@ namespace SGui {
 
     // Add a child component to the window
     Container* AddChild(Component* child) override;
+
+    // Add multiple child components to the window
+    Container* AddChildren(ComponentList children) override;
 
     // Draw the window and its children
     void Draw() override;

@@ -5,9 +5,6 @@
 
 namespace SGui {
 class Button : public Component {
-private:
-  bool isInput_ = true;
-
 public:
   String text_ = "";
 
@@ -20,6 +17,7 @@ public:
     this->click_handler_ = std::move(click_handler);
     this->size_.x = tft.textWidth(text);
     this->size_.y = tft.fontHeight();
+    this->isInput_ = true;
   }
 
   // Set the text of the button
