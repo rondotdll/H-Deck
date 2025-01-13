@@ -21,13 +21,22 @@ namespace SGui {
     String title_ = ""; // Window title
 
     explicit Window() : Container() {
-      if (this->size_.x == 0)
+      Serial.println("Checkpoint 1");
+      if (this->size_.x == 0) {
         this->size_.x = TFT_WIDTH;
-      if (this->size_.y == 0)
-        this->size_.y = TFT_HEIGHT;
+      }
 
-      this->style_->padding_.top = (title_padding.top + title_padding.bottom)      // account for padding in title bar
-                            + tft.fontHeight();     // account for title text
+      if (this->size_.y == 0) {
+        this->size_.y = TFT_HEIGHT;
+      }
+
+      if (this->style_ == nullptr) {
+        Serial.println("Style is null, panicking");
+        exit(-1);
+      }
+
+      this->style_->padding_.top = title_padding.top + title_padding.bottom     // account for title padding
+                                        + tft.fontHeight();     // account for title text
 
       if (title_ != "") {
         this->pos_.y = tft.fontHeight() + this->pos_.y + 1;

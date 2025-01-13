@@ -19,16 +19,18 @@ public:
   UIPoint pos_{0, 0}; // 2D point representing position
   UIRect size_{0, 0}; // 2D point representing size
 
-  UIStyle* style_ = nullptr;
-  UIStyle* focused_style_ = nullptr;
+  UIStyle* style_ = new UIStyle(*DEFAULT_STYLE);
+  UIStyle* focused_style_ = new UIStyle(*DEFAULT_STYLE_FOCUSED);
 
   bool focused_ = false; // focused state
   Component* parent_ = nullptr;
 
   Component() = default; // default constructor
-  explicit Component(UIPoint position, UIRect dimensions, UIStyle* style = DEFAULT_STYLE, UIStyle* focused_style = DEFAULT_STYLE_FOCUSED,
+  explicit Component(UIPoint position, UIRect dimensions, UIStyle* style, UIStyle* focused_style = DEFAULT_STYLE_FOCUSED,
                        Component* parent = nullptr)
-      : pos_(position), size_(dimensions), style_(style), focused_style_(focused_style), parent_(parent) {}
+      : pos_(position), size_(dimensions), style_(style), focused_style_(focused_style), parent_(parent) {
+
+  }
 
   // Draw the component
   virtual void Draw() = 0;

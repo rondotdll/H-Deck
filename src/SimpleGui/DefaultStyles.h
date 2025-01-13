@@ -4,7 +4,7 @@
 
 namespace SGui{
   static UIStyle* DEFAULT_STYLE = new UIStyle(
-    (UIColor)RED, // foreground
+    (UIColor)WHITE, // foreground
     (UIColor)BLACK, // background
     (UIColor)RED, // border color
     1, // border thickness

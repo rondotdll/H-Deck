@@ -31,12 +31,19 @@ void setup() {
   pinMode(TFT_BACKLIGHT_P, OUTPUT);
   digitalWrite(TFT_BACKLIGHT_P, HIGH);
 
+  Serial.println("Initializing TFT...");
   gui = Init();
+  Serial.println("Enabling inputs...");
   gui->enable_inputs();
+
+  Serial.println("Creating window...");
 
   window = new Window();
   window->SetColor((SGui::UIColor)RED);
+  Serial.println("Setting title...");
   window->SetTitle("Example Window");
+
+  Serial.println("Adding children...");
   window->AddChildren(
       {
         (new Label("Hello, World!"))->SetTextSize(2),
@@ -46,8 +53,10 @@ void setup() {
       }
     );
 
+  Serial.println("Adding window to GUI...");
   gui->add_window(window);
 
+  Serial.println("Binding input events...");
   gui->bind_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_UP},
     [](GUIManager* self) {
       self->get_active_window()->FocusPrev(VERTICAL);
@@ -77,7 +86,10 @@ void loop() {
    * 3.) Update UI
    * 4.) Render
    */
+  Serial.println("Handling Inputs...");
   gui->handle_inputs();
+  Serial.println("Drawing UI...");
   gui->draw();
+  Serial.println("Looping...");
   delay(frame_sleep); // Wait for the next frame (as not to overload the Display or the CPU)
 }
