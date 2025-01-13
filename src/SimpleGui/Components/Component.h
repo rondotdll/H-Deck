@@ -11,7 +11,7 @@ namespace SGui {
 // Stores position, size, and parent component
 // (All components should inherit from this class)
 class Component {
-private:
+protected:
   bool isInput_ = false;
   bool absolute_ = false;  // positioning mode
 
@@ -22,7 +22,7 @@ public:
   UIStyle* style_ = nullptr;
   UIStyle* focused_style_ = nullptr;
 
-  bool focused_ = false; // focused state (unused)
+  bool focused_ = false; // focused state
   Component* parent_ = nullptr;
 
   Component() = default; // default constructor
@@ -58,7 +58,11 @@ public:
     };
   }
 
-  virtual std::vector<Component*> get_children() { return { this }; };
+  // Returns the component itself. (Used for Containers)
+  virtual std::vector<Component*> Children() { return { this }; };
+
+  // Change the focused state of the component
+  Component* SetFocus(bool state = true);
 
   // Modify position to move the component into the bounds of its parent
   Component* MoveIntoParentBounds();

@@ -9,17 +9,16 @@
 #include "components.h"
 
 namespace SGui {
-
+  // Vector of Window pointers
   typedef std::vector<Window*> viewport_t;
 
   // namespace SGui
   class GUIManager {
   private:
-    Component* focused_ = nullptr;
+    std::pair<Component*, UIPoint> focused_ = {nullptr, { 0, 0 }};
     Window* active_window_ = nullptr;
 
     viewport_t viewport_ = {};
-    navtree_t tree_ = {};
 
     std::vector<input_event_t> input_queue_ = {};
     std::map<uint16_t, void(*)(GUIManager*)> input_handlers_;
@@ -51,15 +50,15 @@ namespace SGui {
     handler_exception_t handle_inputs();
 
     // Returns pointer to the component that is currently input focused
-    Component* get_focused_component() const { return focused_;}
+    Component* get_focused_component() const { return this->focused_.first; }
     // Returns pointer to the active window
-    Window* get_active_window() const { return active_window_;}
+    Window* get_active_window() const { return this->active_window_;}
     // Returns the current viewport (vector of pointers to each added window)
-    viewport_t get_viewport() const {return viewport_;}
+    viewport_t get_viewport() const {return this->viewport_;}
     // Returns pointer to the current input queue
-    const std::vector<input_event_t>* get_input_queue() const {return &input_queue_;}
+    const std::vector<input_event_t>* get_input_queue() const {return &this->input_queue_;}
 
-    // Adds a window to the viewport
+    // Adds a window to the viewportf
     void add_window(Window* window);
     // Removes a window from the viewport
     void remove_window(Window* window);
@@ -79,7 +78,6 @@ namespace SGui {
     void create_input_event(input_event_t input);
     // Clears the input queue
     void clear_input_queue();
-
 
     // Draws the Gui (active window)
     void draw() const;

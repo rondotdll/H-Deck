@@ -19,8 +19,10 @@ __always_inline void powerTFT() {
   digitalWrite(TFT_BACKLIGHT_P, HIGH);
 }
 
-static SGui::Window* window;
-static SGui::GUIManager* gui;
+using namespace SGui;
+
+static Window* window;
+static GUIManager* gui;
 
 void setup() {
   Serial.begin(115200);
@@ -29,34 +31,41 @@ void setup() {
   pinMode(TFT_BACKLIGHT_P, OUTPUT);
   digitalWrite(TFT_BACKLIGHT_P, HIGH);
 
-  gui = SGui::Init();
+  gui = Init();
   gui->enable_inputs();
 
-  window = new SGui::Window();
+  window = new Window();
   window->SetColor((SGui::UIColor)RED);
   window->SetTitle("Example Window");
   window->AddChildren(
       {
-        (new SGui::Label("Hello, World!"))->SetTextSize(2),
-        (new SGui::Label("This is an example application using the SGui library!"))
+        (new Label("Hello, World!"))->SetTextSize(2),
+        (new Button("Button 1")),
+        (new Button("Button 2")),
+        (new Label("This is an example application using the SGui library!"))
       }
     );
 
   gui->add_window(window);
 
-  gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_PRESS},
-    [](SGui::GUIManager* self) {
-      self->get_active_window()->SetColor((SGui::UIColor)GREEN);
+  gui->bind_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_UP},
+    [](GUIManager* self) {
+      self->get_active_window()->FocusPrev(VERTICAL);
   });
 
-  gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_UP},
-    [](SGui::GUIManager* self) {
-      self->get_active_window()->SetColor((SGui::UIColor)BLUE);
+  gui->bind_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_DOWN},
+    [](GUIManager* self) {
+      self->get_active_window()->FocusNext(VERTICAL);
   });
 
-  gui->bind_input_event(SGui::input_event_t{.type=SGui::TRACKBALL, .id=SGui::TRACKBALL_LEFT},
-    [](SGui::GUIManager* self) {
-      self->get_active_window()->SetColor((SGui::UIColor)RED);
+  gui->bind_input_event(SGui::input_event_t{.type=TRACKBALL, .id=TRACKBALL_LEFT},
+    [](GUIManager* self) {
+      self->get_active_window()->FocusPrev(HORIZONTAL);
+  });
+
+  gui->bind_input_event(SGui::input_event_t{.type=TRACKBALL, .id=TRACKBALL_RIGHT},
+    [](GUIManager* self) {
+      self->get_active_window()->FocusPrev(HORIZONTAL);
   });
 
 }

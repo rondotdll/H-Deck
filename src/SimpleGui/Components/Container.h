@@ -8,15 +8,13 @@
 
 namespace SGui {
 
-typedef std::vector<ComponentList> navtree_t;
 
 // Expanded UIComponent class for all NESTING UI components
 // Stores horizontal padding, vertical padding, and child components
 // (All NESTING components should inherit from this class)
 class Container : public Component {
-private:
+protected:
   ComponentList children_ = {};
-  navtree_t tree_ = {};
 
 public:
   UIOrientation orientation_ = VERTICAL;
@@ -26,19 +24,12 @@ public:
   explicit Container(ComponentList children)
       : Component(), children_(std::move(children)) {}
 
-  ComponentList get_children() override {
-    ComponentList output = { this };
-    for (Component* c : children_ ) {
-      output.push_back(c);
-      for (Component* c2 : c->get_children()) {
-        output.push_back(c2);
-      }
-    }
+  // Returns a list of pointers to recursive children
+  // ***Starts with the component itself
+  ComponentList Children() override;
 
-    return output;
-  }
-
-  ComponentList get_direct_children() const { return children_; }
+  // Returns a list of pointers to direct children (not recursive)
+  ComponentList DirectChildren() const { return children_; }
 
   // Draw just the children of the component (not the component itself)
   void DrawChildren();

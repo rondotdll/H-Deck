@@ -8,12 +8,43 @@
 #include "Container.h"
 
 namespace SGui {
+
+  // Returns a list of pointers to recursive children
+  // ***Starts with the component itself
+  ComponentList Container::Children() {
+    ComponentList output = { this };
+
+    if (this->children_.empty())
+      return output;
+
+    for (Component* c : this->children_ ) {
+      output.push_back(c);
+      for (Component* c2 : c->Children()) {
+        if (c2 == nullptr || c2 == c) break;
+        output.push_back(c2);
+      }
+    }
+
+    return output;
+  }
+
+  // Returns a list of pointers to direct children (not recursive)
   void Container::DrawChildren() {
     for (Component* child : this->children_) {
       child->Draw();
     }
   }
 
+  // Set the padding of the container
+  Container* Container::SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) {
+    this->style_->padding_.top = padding_top;
+    this->style_->padding_.right = padding_right;
+    this->style_->padding_.bottom = padding_bottom;
+    this->style_->padding_.left = padding_left;
+    return this;
+  }
+
+  // Add a child component to the container
   Container* Container::AddChild(Component* child) {
      // No duplicate children
     if (v_includes(this->children_, child))
@@ -39,52 +70,14 @@ namespace SGui {
           break;
       }
     }
-
-    auto children = this->get_children();
-
-    // Scan horizontally
-    for (int x = 0; x < this->tree_.size(); x++) {
-      // Scan vertically
-      for (int y = 0; y < this->tree_[x].size(); y++) {
-        float slope_ = slope(tree_[x][y]->pos_, child->pos_);
-
-        // If vertically oriented
-        if (abs(slope_) >= 1) {
-          // Register child to left of component
-          if (slope_ > 0) {
-            this->tree_[x].insert(tree_[x].begin() + x, child);
-          }
-          // Register child to right of component
-          this->tree_[x].insert(tree_[x].begin() + (x - 1), child);
-        }
-
-        if (abs(slope_) <= 1) {
-          // Register child above component
-          if (slope_ > 0) {
-            this->tree_.insert(tree_.begin() + y, {child});
-          }
-          // Register child below component
-          this->tree_.insert(tree_.begin() + (y - 1), {child});
-        }
-      }
-
-    }
-
     return this;
   }
 
+  // Add multiple child components to the container
   Container* Container::AddChildren(std::vector<Component*> children) {
     for (Component* child : children) {
       this->AddChild(child);
     }
-    return this;
-  }
-
-  Container* Container::SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) {
-    this->style_->padding_.top = padding_top;
-    this->style_->padding_.right = padding_right;
-    this->style_->padding_.bottom = padding_bottom;
-    this->style_->padding_.left = padding_left;
     return this;
   }
 }  // namespace SGui

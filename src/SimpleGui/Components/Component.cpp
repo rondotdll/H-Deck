@@ -5,6 +5,12 @@
 
 namespace SGui {
 
+  // Change the focused state of the component
+  Component* Component::SetFocus(bool state) {
+    this->focused_ = state;
+    return this;
+  }
+
   // Modify position to move the component into the bounds of its parent
   Component* Component::MoveIntoParentBounds() {
     Container* parent = static_cast<Container*>(this->parent_);
@@ -19,7 +25,6 @@ namespace SGui {
 
     return this;
   }
-
 
   // Resize the component to fill its parent
   Component* Component::FillParent() {

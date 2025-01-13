@@ -14,7 +14,7 @@ public:
   bool is_focused_ = false;
   e_handler_t click_handler_ = nullptr;
 
-  explicit Button(String text, e_handler_t &&click_handler) : Component() {
+  explicit Button(String text, e_handler_t &&click_handler = nullptr) : Component() {
     this->text_ = text;
     this->style_->padding_ = {2, 2, 2, 2};
     this->click_handler_ = std::move(click_handler);
