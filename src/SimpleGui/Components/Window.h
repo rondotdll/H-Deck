@@ -13,8 +13,6 @@ namespace SGui {
   // Window Component
   class Window : public Container {
     Component* focused_ = nullptr;
-    UIPoint focused_pos_ = { 0, 0 };
-    navtree_t tree_ = { {} };
 
    public:
     const UIBoxSpacing title_padding{4, 4, 4, 4};
@@ -50,11 +48,6 @@ namespace SGui {
 
     // Set the padding of the container (accounts for window border and title bar)
     Container* SetPadding(int padding_top, int padding_right, int padding_bottom, int padding_left) override;
-
-    // Focuses next component in the specified direction
-    void FocusNext(UIOrientation direction);
-    // Focus previous component in the specified direction
-    void FocusPrev(UIOrientation direction);
 
     // Add a child component to the window
     Container* AddChild(Component* child) override;

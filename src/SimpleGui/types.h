@@ -25,6 +25,8 @@ namespace SGui {
     VERTICAL,
   };
 
+
+
   // Input types for input events
   enum input_type_t {
     BASIC = 1,
@@ -46,6 +48,14 @@ namespace SGui {
     OK,
     NO_HANDLER,
     BAD_HANDLER,
+  };
+
+  // Brief descriptions of status values for focus related functions
+  enum ErrState {
+    SUCCESS,
+    OUT_OF_BOUNDS,
+    NO_CHILDREN,
+    DELINQUENT_CHILD,
   };
 
   typedef struct _Point2D {

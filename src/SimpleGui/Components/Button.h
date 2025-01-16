@@ -17,8 +17,9 @@ public:
     this->click_handler_ = std::move(click_handler);
     this->size_.x = tft.textWidth(text);
     this->size_.y = tft.fontHeight();
-    this->isInput_ = true;
   }
+
+  bool isInput() const override { return true; };
 
   // Set the text of the button
   Button* SetText(String text);

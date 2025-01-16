@@ -12,7 +12,6 @@ namespace SGui {
 // (All components should inherit from this class)
 class Component {
 protected:
-  bool isInput_ = false;
   bool absolute_ = false;  // positioning mode
 
 public:
@@ -38,7 +37,7 @@ public:
   // Get the rendered size of the component
   virtual UIRect GetRenderedSize() const { return size_; }
 
-  bool isInput() const {return isInput_;}
+  virtual bool isInput() const {return false;}
   bool isAbsolute() const {return absolute_;}
 
   // Enable or disable absolute positioning for the component
@@ -64,7 +63,7 @@ public:
   virtual std::vector<Component*> Children() { return { this }; };
 
   // Change the focused state of the component
-  Component* SetFocus(bool state = true);
+  Component* Focus(bool state = true);
 
   // Modify position to move the component into the bounds of its parent
   Component* MoveIntoParentBounds();

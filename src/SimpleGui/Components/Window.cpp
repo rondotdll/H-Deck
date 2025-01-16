@@ -26,70 +26,6 @@ namespace SGui {
     return this;
   }
 
-  // Focus next component in the specified direction
-  void Window::FocusNext(UIOrientation direction){
-    // focused x coordinate
-    uint16_t x = this->focused_pos_.x;
-    // focused y coordinate
-    uint16_t y = this->focused_pos_.y;
-
-    Serial.println("Focusing next component...");
-    Serial.printf("Tree Size: %d\n", this->tree_.size());
-    Serial.printf("Current Focus Coordinate: (%d, %d)\n", x, y);
-
-    switch (direction) {
-      case HORIZONTAL: {
-        if (x == (this->tree_.size() - 1)) return;
-
-        this->focused_->SetFocus(false); // un-focus previously focused
-        this->focused_ = this->tree_[this->focused_pos_.x + 1][this->focused_pos_.y]->SetFocus();
-        this->focused_pos_ = { x++, y }; // dumbass compiler won't let me do `x + 1`
-        break;
-      }
-      case VERTICAL: {
-        // do nothing if already at last item
-        if (y == (this->tree_[x].size() - 1)) return;
-
-        this->focused_->SetFocus(false); // un-focus previously focused
-        this->focused_ = this->tree_[x][y + 1]->SetFocus();
-        this->focused_pos_ = { x, y++ };
-        break;
-      }
-    }
-  }
-
-  // Focus previous component in the specified direction
-  void Window::FocusPrev(UIOrientation direction){
-    // focused x coordinate
-    uint16_t x = this->focused_pos_.x;
-    // focused y coordinate
-    uint16_t y = this->focused_pos_.y;
-    Serial.println("Focusing Previous Component...");
-    Serial.printf("Tree Size: %d\n", this->tree_.size());
-    Serial.printf("Current Focus Coordinate: (%d, %d)\n", x, y);
-
-    switch (direction) {
-      case HORIZONTAL: {
-        // do nothing if already at first item
-        if (x == 0) return;
-
-        this->focused_->SetFocus(false); // un-focus previously focused
-        this->focused_ = this->tree_[this->focused_pos_.x - 1][this->focused_pos_.y]->SetFocus();
-        this->focused_pos_ = { x--, y }; // dumbass compiler won't let me do `x - 1`
-        break;
-      }
-      case VERTICAL: {
-        // do nothing if already at first item
-        if (y == 0) return;
-
-        this->focused_->SetFocus(false); // un-focus previously focused
-        this->focused_ = this->tree_[x][y - 1]->SetFocus();
-        this->focused_pos_ = { x, y-- };
-        break;
-      }
-    }
-  }
-
   // Add a child component to the window
   Container* Window::AddChild(Component* child) {
     // No duplicate children
@@ -116,67 +52,6 @@ namespace SGui {
           break;
       }
     }
-
-    auto sub_children = child->Children();
-
-    if (sub_children.empty()) {
-      return this;
-    }
-
-    for (Component* c : sub_children) {
-      if (!c->isInput()) continue;
-
-      // Account for empty tree
-      if (this->tree_.empty()) {
-        this->tree_.push_back({c});
-        this->focused_ = c;
-        this->focused_pos_ = {0, 0};
-
-        Serial.printf("Added new component to navtree: %p", c);
-        return this;
-      }
-
-      // Scan horizontally
-      for (int x = 0; x < this->tree_.size(); x++) {
-        // Scan vertically
-        for (int y = 0; y < this->tree_[x].size(); y++) {
-
-          float slope_ = slope(tree_[x][y]->pos_, c->pos_);
-
-          // If vertically oriented
-          if (abs(slope_) >= 1) {
-            // Register child to left of component
-            if (slope_ > 0) {
-              this->tree_[x].insert(tree_[x].begin() + x, c);
-              goto UPDATE_FOCUSED;
-            }
-            // Register child to right of component
-            this->tree_[x].insert(tree_[x].begin() + (x - 1), c);
-            goto UPDATE_FOCUSED;
-          }
-
-          if (slope_ > 0) {
-            this->tree_.insert(tree_.begin() + y, {c});
-            goto UPDATE_FOCUSED;
-          }
-          // Register child below component
-          this->tree_.insert(tree_.begin() + (y - 1), {c});
-
-          UPDATE_FOCUSED:
-
-          Serial.printf("Added new component to navtree: %p", c);
-          Serial.printf("Focused Position: (%d, %d)\n", this->focused_pos_.x, this->focused_pos_.y);
-          if (this->focused_pos_.y == y) {
-            this->focused_pos_.y += 1;
-          }
-          if (this->focused_pos_.x == x) {
-            this->focused_pos_.x += 1;
-          }
-          return this;
-        }
-      }
-    }
-    return this;
   }
 
   // Add multiple child components to the window

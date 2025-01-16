@@ -8,6 +8,11 @@
 
 namespace SGui {
 
+typedef struct UIContainerFocusState{
+  FocusErrState err_state;
+  Component* child;
+  int index;
+};
 
 // Expanded UIComponent class for all NESTING UI components
 // Stores horizontal padding, vertical padding, and child components
@@ -15,14 +20,22 @@ namespace SGui {
 class Container : public Component {
 protected:
   ComponentList children_ = {};
+  UIRect content_size_ {0, 0};
+
+  UIContainerFocusState focused_child_ = {
+    NO_CHILDREN,
+    nullptr,
+    -1};
 
 public:
   UIOrientation orientation_ = VERTICAL;
-  UIRect content_size_ {0, 0};
 
   Container() = default; // default constructor
   explicit Container(ComponentList children)
       : Component(), children_(std::move(children)) {}
+
+  __always_inline uint16_t ContentWidth() const { return this->content_size_.x; }
+  __always_inline uint16_t ContentHeight() const { return this->content_size_.y; }
 
   // Returns a list of pointers to recursive children
   // ***Starts with the component itself
@@ -30,6 +43,14 @@ public:
 
   // Returns a list of pointers to direct children (not recursive)
   ComponentList DirectChildren() const { return children_; }
+
+  // Focus the next child component
+  UIContainerFocusStatus FocusNext();
+  // Focus the previous child component
+  UIContainerFocusStatus FocusPrev();
+  // Focus the specified child component
+  UIContainerFocusStatus FocusChild(int index);
+  UIContainerFocusStatus FocusChild(Component* child);
 
   // Draw just the children of the component (not the component itself)
   void DrawChildren();

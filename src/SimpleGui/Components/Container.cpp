@@ -28,6 +28,81 @@ namespace SGui {
     return output;
   }
 
+  // Focus the next child component
+  UIContainerFocusStatus Container::FocusNext() {
+    // No children?
+    if (this->children_.empty())
+      return NO_CHILDREN;
+
+    while (this->focused_child_index_ < children_.size() - 1) {
+      if (this->children_[this->focused_child_index_]->isInput()) {
+        this->focused_child_ = this->children_[this->focused_child_index_]->Focus();
+        return SUCCESS;
+        break;
+      }
+
+      this->focused_child_index_++;
+    }
+    return OUT_OF_BOUNDS;
+  }
+
+  // Focus the previous child component
+  UIContainerFocusStatus Container::FocusPrev() {
+    // No children?
+    if (this->children_.empty())
+      return NO_CHILDREN;
+
+    // Iterate children following focused child
+    while (this->focused_child_index_ > 0) {
+      // Is this an input?
+      if (this->children_[this->focused_child_index_]->isInput()) {
+        this->focused_child_ = this->children_[this->focused_child_index_]->Focus();
+        return SUCCESS;
+      }
+
+      this->focused_child_index_--;
+    }
+    return OUT_OF_BOUNDS;
+  }
+
+  // Focus the specified child component
+  UIContainerFocusStatus Container::FocusChild(int index) {
+    // No children?
+    if (this->children_.size() == 0)
+      return NO_CHILDREN;
+
+    // Verify index is within bounds
+    if (index >= 0 && index < this->children_.size()) {
+      // Is this an input?
+      if (this->children_[index]->isInput()) {
+        this->focused_child_ = this->children_[index]->Focus();
+        this->focused_child_index_ = index;
+        return SUCCESS;
+      }
+      return DELINQUENT_CHILD;
+    }
+    return OUT_OF_BOUNDS;
+  }
+
+  // Focus the specified child component
+  UIContainerFocusStatus Container::FocusChild(Component* child) {
+    // No children?
+    if (this->children_.size() == 0)
+      return NO_CHILDREN;
+
+    if (child->isInput()) {
+      for (int i = 0; i < this->children_.size(); i++) {
+        if (this->children_[i] == child) {
+          this->focused_child_ = child->Focus();
+          this->focused_child_index_ = i;
+          return SUCCESS;
+        }
+      }
+      return OUT_OF_BOUNDS;
+    }
+    return DELINQUENT_CHILD;
+  }
+
   // Returns a list of pointers to direct children (not recursive)
   void Container::DrawChildren() {
     for (Component* child : this->children_) {
@@ -46,30 +121,64 @@ namespace SGui {
 
   // Add a child component to the container
   Container* Container::AddChild(Component* child) {
-     // No duplicate children
-    if (v_includes(this->children_, child))
-      return this;
+    // If empty, skip all logic
+    if (this->children_.empty()) {
+      this->children_.push_back(child);
+      goto END;
+    }
 
+    int i = 0;
+
+    switch (this->orientation_) {
+      case HORIZONTAL: {
+        // If relatively positioned, re-position the child to the parent
+        if (!child->isAbsolute()) {
+          child->MovePos(this->ContentWidth(), 0);
+          this->content_size_.y += child->GetRenderedSize().y;
+        }
+
+        // Iterate through all children
+        for (Component* c : this->children_) {
+          // No duplicate children
+          if (c == child) return this;
+
+          if (c->x() > child->x()) {
+            this->children_.insert(this->children_.begin() + i, child);
+            goto END;
+          }
+
+          i += 1;
+        }
+        break;
+      }
+
+      case VERTICAL: {
+        if (!child->isAbsolute()) {
+          child->MovePos(0, this->ContentHeight());
+          this->content_size_.y += child->GetRenderedSize().y;
+        }
+
+        for (Component* c : this->children_) {
+          if (c == child) return this;
+
+          if (c->y() > child->y()) {
+            this->children_.insert(this->children_.begin() + i, child);
+            goto END;
+          }
+
+          i += 1;
+        }
+        break;
+      }
+    }
+
+    // If it's further down than everything else, add it to the end of the stack
     this->children_.push_back(child);
+
+    END:
     child->SetParent(this);
     child->MoveIntoParentBounds();
 
-    // Check if child has rel positioning
-    if (!child->isAbsolute()) {
-      switch(this->orientation_) {
-        case VERTICAL:
-          child->MovePos(0, this->content_size_.y);
-          this->content_size_.y += child->GetRenderedSize().y;
-          break;
-        case HORIZONTAL:
-          child->MovePos(this->content_size_.x, 0);
-          this->content_size_.x += child->GetRenderedSize().x;
-          break;
-
-        default:
-          break;
-      }
-    }
     return this;
   }
 
