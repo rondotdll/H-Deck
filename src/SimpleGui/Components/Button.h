@@ -19,7 +19,7 @@ public:
     this->size_.y = tft.fontHeight();
   }
 
-  bool isInput() const override { return true; };
+  component_type_t type() const override { return CONTROL; };
 
   // Set the text of the button
   Button* SetText(String text);

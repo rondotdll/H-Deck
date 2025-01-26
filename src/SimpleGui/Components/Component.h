@@ -37,8 +37,9 @@ public:
   // Get the rendered size of the component
   virtual UIRect GetRenderedSize() const { return size_; }
 
-  virtual bool isInput() const {return false;}
-  bool isAbsolute() const {return absolute_;}
+  bool isAbsolute() const { return absolute_; }
+
+  virtual component_type_t type() const { return NORMAL; }
 
   // Enable or disable absolute positioning for the component
   Component* absolute(bool enabled = true);

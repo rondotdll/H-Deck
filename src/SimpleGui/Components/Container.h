@@ -9,8 +9,8 @@
 namespace SGui {
 
 typedef struct UIContainerFocusState{
-  FocusErrState err_state;
-  Component* child;
+  focus_state_status_t err_state;
+  Component* component;
   int index;
 };
 
@@ -22,10 +22,11 @@ protected:
   ComponentList children_ = {};
   UIRect content_size_ {0, 0};
 
-  UIContainerFocusState focused_child_ = {
+  UIContainerFocusState focused_state_ = {
     NO_CHILDREN,
     nullptr,
-    -1};
+    -1
+  };
 
 public:
   UIOrientation orientation_ = VERTICAL;
@@ -37,6 +38,8 @@ public:
   __always_inline uint16_t ContentWidth() const { return this->content_size_.x; }
   __always_inline uint16_t ContentHeight() const { return this->content_size_.y; }
 
+  component_type_t type() const override { return CONTAINER; }
+
   // Returns a list of pointers to recursive children
   // ***Starts with the component itself
   ComponentList Children() override;
@@ -45,12 +48,12 @@ public:
   ComponentList DirectChildren() const { return children_; }
 
   // Focus the next child component
-  UIContainerFocusStatus FocusNext();
+  UIContainerFocusState FocusNext();
   // Focus the previous child component
-  UIContainerFocusStatus FocusPrev();
+  UIContainerFocusState FocusPrev();
   // Focus the specified child component
-  UIContainerFocusStatus FocusChild(int index);
-  UIContainerFocusStatus FocusChild(Component* child);
+  UIContainerFocusState FocusChild(int index);
+  UIContainerFocusState FocusChild(Component* child);
 
   // Draw just the children of the component (not the component itself)
   void DrawChildren();

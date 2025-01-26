@@ -29,78 +29,119 @@ namespace SGui {
   }
 
   // Focus the next child component
-  UIContainerFocusStatus Container::FocusNext() {
+  UIContainerFocusState Container::FocusNext() {
     // No children?
-    if (this->children_.empty())
-      return NO_CHILDREN;
+    if (this->children_.empty()) {
+      // Trigger error state
+      this->focused_state_.index = -1;
+      this->focused_state_.component = nullptr;
+      this->focused_state_.err_state = NO_CHILDREN;
+      return this->focused_state_;
+    }
 
-    while (this->focused_child_index_ < children_.size() - 1) {
-      if (this->children_[this->focused_child_index_]->isInput()) {
-        this->focused_child_ = this->children_[this->focused_child_index_]->Focus();
-        return SUCCESS;
+    // Iterate children following focused child
+    while (this->focused_state_.index < children_.size() - 1) {
+      if (this->children_[this->focused_state_.index]->type() == CONTROL) {
+        this->focused_state_.component = this->children_[this->focused_state_.index]->Focus();
+        focused_state_.err_state = SUCCESS;
+        return this->focused_state_;
         break;
       }
 
-      this->focused_child_index_++;
+      this->focused_state_.index++; // move to the next child
     }
-    return OUT_OF_BOUNDS;
+    this->focused_state_.err_state = OUT_OF_BOUNDS;
+    return this->focused_state_;
   }
 
   // Focus the previous child component
-  UIContainerFocusStatus Container::FocusPrev() {
+  UIContainerFocusState Container::FocusPrev() {
     // No children?
-    if (this->children_.empty())
-      return NO_CHILDREN;
+    if (this->children_.empty()) {
+      this->focused_state_.err_state = NO_CHILDREN;
+      this->focused_state_.component = nullptr;
+      this->focused_state_.index = -1;
+      return this->focused_state_;
+    }
 
-    // Iterate children following focused child
-    while (this->focused_child_index_ > 0) {
+    while (this->focused_state_.index > 0) {
       // Is this an input?
-      if (this->children_[this->focused_child_index_]->isInput()) {
-        this->focused_child_ = this->children_[this->focused_child_index_]->Focus();
-        return SUCCESS;
+      if (this->children_[this->focused_state_.index]->type() == CONTROL) {
+        // update the state and return success
+        this->focused_state_.err_state = SUCCESS;
+        this->focused_state_.component = this->children_[this->focused_state_.index]->Focus();
+        return this->focused_state_;
       }
 
-      this->focused_child_index_--;
+      this->focused_state_.index--; // move to the previous child
     }
-    return OUT_OF_BOUNDS;
+
+    // don't change focus, just return out of bounds
+    this->focused_state_.index = distance(this->children_.begin(),
+      find(this->children_.begin(), this->children_.end(), this->focused_state_.component)
+      ); // blame C++ iterators for this garbage syntax
+    this->focused_state_.err_state = OUT_OF_BOUNDS;
+    return this->focused_state_;
   }
 
   // Focus the specified child component
-  UIContainerFocusStatus Container::FocusChild(int index) {
+  UIContainerFocusState Container::FocusChild(int index) {
     // No children?
-    if (this->children_.size() == 0)
-      return NO_CHILDREN;
+    if (this->children_.empty()) {
+      this->focused_state_.component = nullptr;
+      this->focused_state_.index = -1;
+      this->focused_state_.err_state = NO_CHILDREN;
+      return this->focused_state_;
+    }
 
     // Verify index is within bounds
     if (index >= 0 && index < this->children_.size()) {
       // Is this an input?
-      if (this->children_[index]->isInput()) {
-        this->focused_child_ = this->children_[index]->Focus();
-        this->focused_child_index_ = index;
-        return SUCCESS;
+      if (this->children_[index]->type() == CONTROL) {
+        this->focused_state_.component = this->children_[index]->Focus();
+        this->focused_state_.index = index;
+        this->focused_state_.err_state = SUCCESS;
+        return this->focused_state_;
       }
-      return DELINQUENT_CHILD;
+
+      // don't change focus, just return delinquent child
+      this->focused_state_.err_state = DELINQUENT_CHILD;
+      return this->focused_state_;
     }
-    return OUT_OF_BOUNDS;
+
+    // don't change focus, just return out of bounds
+    this->focused_state_.err_state = OUT_OF_BOUNDS;
+    this->focused_state_.index = distance(this->children_.begin(),
+      find(this->children_.begin(), this->children_.end(), this->focused_state_.component)
+      ); // blame C++ iterators for this garbage syntax
+    return this->focused_state_;
   }
 
   // Focus the specified child component
-  UIContainerFocusStatus Container::FocusChild(Component* child) {
+  UIContainerFocusState Container::FocusChild(Component* child) {
     // No children?
-    if (this->children_.size() == 0)
-      return NO_CHILDREN;
+    if (this->children_.empty()) {
+      this->focused_state_.err_state = NO_CHILDREN;
+      this->focused_state_.component = nullptr;
+      this->focused_state_.index = -1;
+      goto end;
+    }
 
-    if (child->isInput()) {
+    if (child->type() == CONTROL) {
       for (int i = 0; i < this->children_.size(); i++) {
         if (this->children_[i] == child) {
-          this->focused_child_ = child->Focus();
-          this->focused_child_index_ = i;
-          return SUCCESS;
+          this->focused_state_.component = child->Focus();
+          this->focused_state_.index = i;
+          this->focused_state_.err_state = SUCCESS;
+          goto end;
         }
       }
-      return OUT_OF_BOUNDS;
+      this->focused_state_.err_state = OUT_OF_BOUNDS;
+      goto end;
     }
-    return DELINQUENT_CHILD;
+    this->focused_state_.err_state = DELINQUENT_CHILD;
+    end:
+    return this->focused_state_;
   }
 
   // Returns a list of pointers to direct children (not recursive)
