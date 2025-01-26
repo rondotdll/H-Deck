@@ -52,6 +52,8 @@ namespace SGui {
           break;
       }
     }
+
+    return this;
   }
 
   // Add multiple child components to the window

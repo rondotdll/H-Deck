@@ -44,13 +44,13 @@ namespace SGui {
       if (this->children_[this->focused_state_.index]->type() == CONTROL) {
         this->focused_state_.component = this->children_[this->focused_state_.index]->Focus();
         focused_state_.err_state = SUCCESS;
-        return this->focused_state_;
-        break;
+        goto end;
       }
 
       this->focused_state_.index++; // move to the next child
     }
     this->focused_state_.err_state = OUT_OF_BOUNDS;
+    end:
     return this->focused_state_;
   }
 
@@ -61,7 +61,7 @@ namespace SGui {
       this->focused_state_.err_state = NO_CHILDREN;
       this->focused_state_.component = nullptr;
       this->focused_state_.index = -1;
-      return this->focused_state_;
+      goto end;
     }
 
     while (this->focused_state_.index > 0) {
@@ -70,7 +70,7 @@ namespace SGui {
         // update the state and return success
         this->focused_state_.err_state = SUCCESS;
         this->focused_state_.component = this->children_[this->focused_state_.index]->Focus();
-        return this->focused_state_;
+        goto end;
       }
 
       this->focused_state_.index--; // move to the previous child
@@ -81,6 +81,8 @@ namespace SGui {
       find(this->children_.begin(), this->children_.end(), this->focused_state_.component)
       ); // blame C++ iterators for this garbage syntax
     this->focused_state_.err_state = OUT_OF_BOUNDS;
+
+    end:
     return this->focused_state_;
   }
 
@@ -162,13 +164,13 @@ namespace SGui {
 
   // Add a child component to the container
   Container* Container::AddChild(Component* child) {
+    int i = 0; //  do not move (compiler error)
+
     // If empty, skip all logic
     if (this->children_.empty()) {
       this->children_.push_back(child);
-      goto END;
+      goto end;
     }
-
-    int i = 0;
 
     switch (this->orientation_) {
       case HORIZONTAL: {
@@ -185,12 +187,11 @@ namespace SGui {
 
           if (c->x() > child->x()) {
             this->children_.insert(this->children_.begin() + i, child);
-            goto END;
+            goto end;
           }
 
           i += 1;
         }
-        break;
       }
 
       case VERTICAL: {
@@ -204,19 +205,18 @@ namespace SGui {
 
           if (c->y() > child->y()) {
             this->children_.insert(this->children_.begin() + i, child);
-            goto END;
+            goto end;
           }
 
           i += 1;
         }
-        break;
       }
     }
 
     // If it's further down than everything else, add it to the end of the stack
     this->children_.push_back(child);
 
-    END:
+    end:
     child->SetParent(this);
     child->MoveIntoParentBounds();
 

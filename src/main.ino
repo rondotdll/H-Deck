@@ -59,22 +59,22 @@ void setup() {
   Serial.println("Binding input events...");
   gui->bind_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_UP},
     [](GUIManager* self) {
-      self->get_active_window()->FocusPrev(VERTICAL);
+      self->get_active_window()->FocusPrev();
   });
 
   gui->bind_input_event(input_event_t{.type=TRACKBALL, .id=TRACKBALL_DOWN},
     [](GUIManager* self) {
-      self->get_active_window()->FocusNext(VERTICAL);
+      self->get_active_window()->FocusNext();
   });
 
   gui->bind_input_event(SGui::input_event_t{.type=TRACKBALL, .id=TRACKBALL_LEFT},
     [](GUIManager* self) {
-      self->get_active_window()->FocusPrev(HORIZONTAL);
+      self->get_active_window()->FocusPrev();
   });
 
   gui->bind_input_event(SGui::input_event_t{.type=TRACKBALL, .id=TRACKBALL_RIGHT},
     [](GUIManager* self) {
-      self->get_active_window()->FocusNext(HORIZONTAL);
+      self->get_active_window()->FocusNext();
   });
 
 }

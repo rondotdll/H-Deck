@@ -49,14 +49,14 @@ namespace SGui {
   };
 
   // Brief descriptions of status values for focus related functions
-  typedef enum focus_state_status_t {
+  enum focus_state_status_t {
     SUCCESS,
     OUT_OF_BOUNDS,
     NO_CHILDREN,
     DELINQUENT_CHILD,
   };
 
-  typedef enum component_type_t {
+  enum component_type_t {
     NORMAL,
     CONTROL,
     CONTAINER

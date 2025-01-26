@@ -8,7 +8,7 @@
 
 namespace SGui {
 
-typedef struct UIContainerFocusState{
+struct UIContainerFocusState{
   focus_state_status_t err_state;
   Component* component;
   int index;
